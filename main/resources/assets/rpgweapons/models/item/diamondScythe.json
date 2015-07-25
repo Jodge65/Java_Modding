@@ -1,0 +1,18 @@
+{
+    "parent": "builtin/generated",
+    "textures": {
+        "layer0": "rpgweapons:items/diamondScythe"
+    },
+    "display": {
+        "thirdperson": {
+            "rotation": [ 0, 90, -115 ],
+            "translation": [ -0.1, -0.5, -2.5 ],
+            "scale": [ 1.7, 1.7, 0.85 ]
+        },
+        "firstperson": {
+            "rotation": [ 0, -150, 50 ],
+            "translation": [ 0, 4, 2 ],
+            "scale": [ 3.0, 3.0, 1.7 ]
+        }
+    }
+}
