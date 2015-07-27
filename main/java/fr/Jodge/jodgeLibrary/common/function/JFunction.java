@@ -1,29 +1,36 @@
-package fr.Jodge.jodgeLibrary.common;
+package fr.Jodge.jodgeLibrary.common.function;
 
-import fr.Jodge.jodgeLibrary.common.toolSet.JWeapons;
-import java.io.PrintStream;
 import java.util.Locale;
+
+import fr.Jodge.jodgeLibrary.common.extendWeapons.JWeapons;
+
+
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetHandlerPlayServer;
+
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
+
 import net.minecraft.stats.AchievementList;
 import net.minecraft.stats.StatList;
+
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class JFunction
@@ -31,260 +38,6 @@ public class JFunction
 	public static final String getJAuthor()
 	{
 		return "Jodge65";
-	}
-
-	public static enum nbtVar
-	{
-		RightCombo("rC"), 
-		RightPreviousCombo("rPC"), 
-		LeftCombo("lC"), 
-		LeftPreviousCombo("lPC"), 
-		StartCombo("sC");
-
-		private String name = "";
-
-		nbtVar(String name)
-		{
-			this.name = name;
-		}
-
-		public String toString()
-		{
-			return name;
-		}
-
-		public static boolean writeNbtVar(ItemStack stack, nbtVar var, int value)
-		{
-			boolean isWrite = false;
-			if (stack.hasTagCompound())
-			{
-				NBTTagCompound itemData = stack.getTagCompound();
-
-				String varName = var.toString();
-
-				if (itemData.hasKey(varName))
-				{
-					stack.getTagCompound().setInteger(varName, value);
-					isWrite = true;
-				}
-			}
-
-			return isWrite;
-
-		}
-
-		public static boolean incNbtVarInt(ItemStack stack, nbtVar var)
-		{
-			int i = readNbtVarInt(stack, var);
-
-			return writeNbtVar(stack, var, i + 1);
-		}
-
-		public static boolean decNbtVarInt(ItemStack stack, nbtVar var)
-		{
-			int i = readNbtVarInt(stack, var);
-			return writeNbtVar(stack, var, i - 1);
-		}
-
-		public static int readNbtVarInt(ItemStack stack, nbtVar var)
-		{
-			if (stack.hasTagCompound())
-			{
-				NBTTagCompound itemData = stack.getTagCompound();
-
-				String varName = var.toString();
-
-				if (itemData.hasKey(varName))
-				{
-					return stack.getTagCompound().getInteger(varName);
-				}
-			}
-			
-			return 0;
-		}
-
-	}
-
-	public static void dealDamage(EntityPlayer playerIn, EntityLivingBase targetEntity, float damageMultiplier, Boolean knockBack, Boolean canBeCritical, float criticalBonus)
-	{
-		if ((playerIn instanceof EntityPlayer))
-		{
-			if (targetEntity.canAttackWithItem())
-			{
-				if (!targetEntity.hitByEntity(playerIn))
-				{
-					float entityDamage = (float) playerIn.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-					float enchantDamage = EnchantmentHelper.func_152377_a(playerIn.getHeldItem(), targetEntity.getCreatureAttribute());
-					ItemStack itemstack = playerIn.getCurrentEquippedItem();
-					int knockBackPower = EnchantmentHelper.getKnockbackModifier(playerIn);
-					if (playerIn.isSprinting())
-					{
-						knockBackPower++;
-					}
-					if ((entityDamage > 0.0F) || (enchantDamage > 0.0F))
-					{
-						boolean criticalOccure = (criticalHit(playerIn, itemstack)) && (canBeCritical.booleanValue());
-						if ((criticalOccure) && (entityDamage > 0.0F))
-						{
-							entityDamage *= criticalBonus;
-						}
-						entityDamage += enchantDamage;
-
-						boolean isBurning = false;
-
-						int fireAspectPower = EnchantmentHelper.getFireAspectModifier(playerIn);
-						if ((fireAspectPower > 0) && (!targetEntity.isBurning()))
-						{
-							isBurning = true;
-							targetEntity.setFire(1);
-						}
-						double d0 = targetEntity.motionX;
-						double d1 = targetEntity.motionY;
-						double d2 = targetEntity.motionZ;
-
-						entityDamage *= damageMultiplier;
-						if (targetEntity.attackEntityFrom(DamageSource.causePlayerDamage(playerIn), entityDamage))
-						{
-							if (!knockBack.booleanValue())
-							{
-								knockBackPower = 0;
-							}
-							if (knockBackPower > 0)
-							{
-								targetEntity.addVelocity(-MathHelper.sin(playerIn.rotationYaw * 3.1415927F / 180.0F) * knockBackPower * 0.5F, 0.1D, MathHelper.cos(playerIn.rotationYaw * 3.1415927F / 180.0F) * knockBackPower * 0.5F);
-								playerIn.motionX *= 0.6D;
-								playerIn.motionZ *= 0.6D;
-								playerIn.setSprinting(false);
-							}
-							if (((targetEntity instanceof EntityPlayerMP)) && (targetEntity.velocityChanged))
-							{
-								((EntityPlayerMP) targetEntity).playerNetServerHandler.sendPacket(new S12PacketEntityVelocity(targetEntity));
-								targetEntity.velocityChanged = false;
-								targetEntity.motionX = d0;
-								targetEntity.motionY = d1;
-								targetEntity.motionZ = d2;
-							}
-							if (criticalOccure)
-							{
-								playerIn.onCriticalHit(targetEntity);
-							}
-							if (enchantDamage > 0.0F)
-							{
-								playerIn.onEnchantmentCritical(targetEntity);
-							}
-							if (entityDamage >= 18.0F)
-							{
-								playerIn.triggerAchievement(AchievementList.overkill);
-							}
-							playerIn.setLastAttacker(targetEntity);
-							if (itemstack != null)
-							{
-								itemstack.hitEntity(targetEntity, playerIn);
-								if (itemstack.stackSize <= 0)
-								{
-									playerIn.destroyCurrentEquippedItem();
-								}
-							}
-							playerIn.addStat(StatList.damageDealtStat, Math.round(entityDamage * 10.0F));
-							if (fireAspectPower > 0)
-							{
-								targetEntity.setFire(fireAspectPower * 4);
-							}
-							playerIn.addExhaustion(0.3F);
-						}
-						else if (isBurning)
-						{
-							targetEntity.extinguish();
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static void dealDamage(EntityPlayer playerIn, EntityLivingBase targetEntity)
-	{
-		dealDamage(playerIn, targetEntity, 1.0F);
-	}
-
-	public static void dealDamage(EntityPlayer playerIn, EntityLivingBase targetEntity, float damageMultiplier)
-	{
-		dealDamage(playerIn, targetEntity, damageMultiplier, Boolean.valueOf(true));
-	}
-
-	public static void dealDamage(EntityPlayer playerIn, EntityLivingBase targetEntity, float damageMultiplier, Boolean knockBack)
-	{
-		dealDamage(playerIn, targetEntity, damageMultiplier, knockBack, Boolean.valueOf(true));
-	}
-
-	public static void dealDamage(EntityPlayer playerIn, EntityLivingBase targetEntity, float damageMultiplier, Boolean knockBack, Boolean canBeCritical)
-	{
-		dealDamage(playerIn, targetEntity, damageMultiplier, knockBack, canBeCritical, 1.5F);
-	}
-
-	public static boolean criticalHit(EntityPlayer playerIn, ItemStack itemstack)
-	{
-		return false;
-	}
-
-	public static void destroyBlock(EntityPlayer entity, int maxRange, World worldIn, JWeapons itemUse, int minRange, int rangeMultiplier)
-	{
-		int posX = entity.getPosition().getX();
-		int posY = entity.getPosition().getY();
-		int posZ = entity.getPosition().getZ();
-		if (maxRange < minRange)
-		{
-			maxRange = minRange;
-		}
-		maxRange *= rangeMultiplier;
-		for (int x = 0; x < maxRange; x++)
-		{
-			for (int z = 0; z < maxRange - x; z++)
-			{
-				BlockPos temps = new BlockPos(posX + x, posY, posZ + z);
-
-				Block myBlock = worldIn.getBlockState(temps).getBlock();
-				if (itemUse.destructibleBlock(myBlock, temps, worldIn, entity))
-				{
-					worldIn.destroyBlock(temps, true);
-				}
-				if (z != 0)
-				{
-					temps = new BlockPos(posX + x, posY, posZ - z);
-
-					myBlock = worldIn.getBlockState(temps).getBlock();
-					if (itemUse.destructibleBlock(myBlock, temps, worldIn, entity))
-					{
-						worldIn.destroyBlock(temps, true);
-					}
-				}
-				if (x != 0)
-				{
-					temps = new BlockPos(posX - x, posY, posZ + z);
-
-					myBlock = worldIn.getBlockState(temps).getBlock();
-					if (itemUse.destructibleBlock(myBlock, temps, worldIn, entity))
-					{
-						worldIn.destroyBlock(temps, true);
-					}
-					if (z != 0)
-					{
-						temps = new BlockPos(posX - x, posY, posZ - z);
-
-						myBlock = worldIn.getBlockState(temps).getBlock();
-						if (itemUse.destructibleBlock(myBlock, temps, worldIn, entity))
-						{
-							worldIn.destroyBlock(temps, true);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static void destroyBlock(EntityPlayer entity, int maxRange, World worldIn, JWeapons itemUse)
-	{
-		destroyBlock(entity, maxRange, worldIn, itemUse, 1, 1);
 	}
 
 	public static String convertNameToUnLocalizedName(String unLocalized)
@@ -571,7 +324,7 @@ public class JFunction
 		{
 			oreDictionary = convertNameToUnLocalizedName(name);
 		}
-		Jlog("[WARNING] The Block \"" + name + "\" doens't have an oreDictionnary name. \"" + oreDictionary + "\" was generate.");
+		JLog.write("[WARNING] The Block \"" + name + "\" doens't have an oreDictionnary name. \"" + oreDictionary + "\" was generate.");
 		return oreDictionary;
 	}
 
@@ -656,60 +409,9 @@ public class JFunction
 			}
 			return Boolean.valueOf(true);
 		}
-		Jlog("[WARNING] The crafting schema \"" + format + "\" doens't exist");
+		JLog.write("[WARNING] The crafting schema \"" + format + "\" doens't exist");
 		return Boolean.valueOf(false);
 	}
 
-	public static void drawTexturedModalRect(int x, int y, float z, int textureX, int textureY, int width, int height)
-	{
-		drawTexturedModalRect(x, y, z, textureX, textureY, width, height, 0.00390625F, 0.00390625F);
-	}
 
-	public static void drawTexturedModalRect(int x, int y, float z, int textureX, int textureY, int width, int height, float f, float f1)
-	{
-		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-
-		worldrenderer.startDrawingQuads();
-		worldrenderer.addVertexWithUV(x + 0, y + height, z, (textureX + 0) * f, (textureY + height) * f1);
-		worldrenderer.addVertexWithUV(x + width, y + height, z, (textureX + width) * f, (textureY + height) * f1);
-		worldrenderer.addVertexWithUV(x + width, y + 0, z, (textureX + width) * f, (textureY + 0) * f1);
-		worldrenderer.addVertexWithUV(x + 0, y + 0, z, (textureX + 0) * f, (textureY + 0) * f1);
-		tessellator.draw();
-	}
-
-	public float getHardness(Block block)
-	{
-		return block.getBlockHardness(null, null);
-	}
-
-	public float getHardness(int iDBlock)
-	{
-		return getHardness(Block.getBlockById(iDBlock));
-	}
-
-	public float getHardness(String block)
-	{
-		return getHardness(getBlockByName(block));
-	}
-
-	public Block getBlockByName(String block)
-	{
-		return Block.getBlockFromName(block);
-	}
-
-	public static void write(String text)
-	{
-		System.out.println(text);
-	}
-
-	public static void writeLog(String text)
-	{
-		System.out.println(text);
-	}
-
-	public static void Jlog(String text)
-	{
-		writeLog(text);
-	}
 }

@@ -1,8 +1,8 @@
 package fr.Jodge.jodgeLibrary.common.toolSet;
 
-import fr.Jodge.jodgeLibrary.common.CommonProxy;
-import fr.Jodge.jodgeLibrary.common.JFunction;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
 import fr.Jodge.jodgeLibrary.common.Main;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;

@@ -1,6 +1,5 @@
-package fr.Jodge.jodgeLibrary.client;
+package fr.Jodge.jodgeLibrary.proxy;
 
-import fr.Jodge.jodgeLibrary.common.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;

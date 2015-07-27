@@ -1,6 +1,10 @@
-package fr.Jodge.jodgeLibrary.common;
+package fr.Jodge.jodgeLibrary.common.item;
+
+import fr.Jodge.jodgeLibrary.common.Main;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
 
 import net.minecraft.item.Item;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 

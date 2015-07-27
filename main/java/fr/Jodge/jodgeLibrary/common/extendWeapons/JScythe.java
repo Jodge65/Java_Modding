@@ -1,9 +1,12 @@
-package fr.Jodge.jodgeLibrary.common.toolSet;
+package fr.Jodge.jodgeLibrary.common.extendWeapons;
 
-import fr.Jodge.jodgeLibrary.common.CommonProxy;
-import fr.Jodge.jodgeLibrary.common.JFunction;
+
 import fr.Jodge.jodgeLibrary.common.Main;
-import fr.Jodge.jodgeLibrary.common.JFunction.nbtVar;
+import fr.Jodge.jodgeLibrary.common.function.JBlockHelper;
+import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.function.JNbtVar;
+
 
 import java.util.List;
 import net.minecraft.block.Block;
@@ -95,26 +98,26 @@ public class JScythe extends JWeapons
 			double bonus = 1.0D + x / 20;
 			float damageMultiplier = 0.75F;
 
-			nbtVar.incNbtVarInt(itemStackIn, nbtVar.RightCombo);
+			JNbtVar.incNbtVarInt(itemStackIn, JNbtVar.RightCombo);
 			AxisAlignedBB hitArea;
 			if (playerIn.isSneaking())
 			{
 				hitArea = new AxisAlignedBB(playerIn.posX, playerIn.posY, playerIn.posZ, playerIn.posX + 1.0D, playerIn.posY + 1.0D, playerIn.posZ + 1.0D).expand(bonus, 0.0D, bonus);
-				JFunction.destroyBlock(playerIn, (int) bonus, worldIn, this, 2, 3);
+				JBlockHelper.destroyBlock(playerIn, (int) bonus, worldIn, this, 2, 3);
 			}
 			else
 			{
 				hitArea = new AxisAlignedBB(playerIn.posX, playerIn.posY + 1.0D, playerIn.posZ, playerIn.posX + 1.0D, playerIn.posY + 2.0D, playerIn.posZ + 1.0D).expand(bonus, 0.0D, bonus);
 				damageMultiplier += 0.5F;
 			}
-			damageMultiplier *= (0.25F + (float) (bonus / 4.0D)) * 1.5F * (0.5F / nbtVar.readNbtVarInt(itemStackIn, nbtVar.RightCombo) + 0.5F);
+			damageMultiplier *= (0.25F + (float) (bonus / 4.0D)) * 1.5F * (0.5F / JNbtVar.readNbtVarInt(itemStackIn, JNbtVar.RightCombo) + 0.5F);
 
 			List entityList = playerIn.worldObj.getEntitiesWithinAABBExcludingEntity(playerIn, hitArea);
 			for (int i = 0; i < entityList.size(); i++)
 			{
 				if ((entityList.get(i) instanceof EntityLivingBase))
 				{
-					JFunction.dealDamage(playerIn, (EntityLivingBase) entityList.get(i), damageMultiplier, Boolean.valueOf(false));
+					JDamageHelper.dealDamage(playerIn, (EntityLivingBase) entityList.get(i), damageMultiplier, Boolean.valueOf(false));
 				}
 			}
 		}

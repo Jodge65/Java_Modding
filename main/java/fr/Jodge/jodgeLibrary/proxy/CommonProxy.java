@@ -1,4 +1,4 @@
-package fr.Jodge.jodgeLibrary.common;
+package fr.Jodge.jodgeLibrary.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

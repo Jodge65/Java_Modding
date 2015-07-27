@@ -1,4 +1,4 @@
-package fr.Jodge.jodgeLibrary.common;
+package fr.Jodge.jodgeLibrary.common.block;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;

@@ -1,5 +1,6 @@
 package fr.Jodge.jodgeLibrary.common;
 
+import fr.Jodge.jodgeLibrary.proxy.CommonProxy;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -17,10 +18,13 @@ public class Main
 	public static final String MODID = "jodgelibrary";
 	public static final String MODNAME = "Jodge Library";
 	public static final String MODVER = "A0.1.0";
+	
 	public static final boolean DEBUG = true;
+	
 	@Mod.Instance("jodgelibrary")
 	public static Main instance;
-	@SidedProxy(clientSide = "fr.Jodge.jodgeLibrary.client.ClientProxy", serverSide = "fr.Jodge.jodgeLibrary.common.CommonProxy")
+	
+	@SidedProxy(clientSide = "fr.Jodge.jodgeLibrary.proxy.ClientProxy", serverSide = "fr.Jodge.jodgeLibrary.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
 	@Mod.EventHandler
@@ -32,9 +36,13 @@ public class Main
 	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerRender();
-		if (event.getSide().isClient())
+		if (event.getSide().isClient()) // Client
 		{
 			MinecraftForge.EVENT_BUS.register(new JScreen());
+		}
+		else // Serveur
+		{
+			
 		}
 	}
 

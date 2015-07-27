@@ -1,12 +1,13 @@
 package fr.Jodge.universalOres.common;
 
-import fr.Jodge.jodgeLibrary.common.JBlock;
-import fr.Jodge.jodgeLibrary.common.JItem;
-import fr.Jodge.jodgeLibrary.common.JMaterial;
+
+import fr.Jodge.jodgeLibrary.common.block.JBlock;
+import fr.Jodge.jodgeLibrary.common.block.JMaterial;
+import fr.Jodge.jodgeLibrary.common.extendWeapons.JScythe;
+import fr.Jodge.jodgeLibrary.common.item.JItem;
 import fr.Jodge.jodgeLibrary.common.toolSet.JAxe;
 import fr.Jodge.jodgeLibrary.common.toolSet.JHoe;
 import fr.Jodge.jodgeLibrary.common.toolSet.JPickaxe;
-import fr.Jodge.jodgeLibrary.common.toolSet.JScythe;
 import fr.Jodge.jodgeLibrary.common.toolSet.JSpade;
 import fr.Jodge.jodgeLibrary.common.toolSet.JSword;
 import net.minecraft.block.Block;

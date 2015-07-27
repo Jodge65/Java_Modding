@@ -1,6 +1,6 @@
-package fr.Jodge.rpg.weapons.client;
+package fr.Jodge.rpgWeapons.client;
 
-import fr.Jodge.rpg.weapons.common.CommonProxy;
+import fr.Jodge.rpgWeapons.common.CommonProxy;
 
 public class ClientProxy extends CommonProxy
 {

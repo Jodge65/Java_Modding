@@ -1,6 +1,6 @@
-package fr.Jodge.rpg.weapons.common;
+package fr.Jodge.rpgWeapons.common;
 
-import fr.Jodge.jodgeLibrary.common.toolSet.JScythe;
+import fr.Jodge.jodgeLibrary.common.extendWeapons.JScythe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,7 +23,7 @@ public class Main
 	@Mod.Instance("rpgweapons")
 	public static Main instance;
 
-	@SidedProxy(clientSide = "fr.Jodge.rpg.weapons.client.ClientProxy", serverSide = "fr.Jodge.rpg.weapons.common.CommonProxy")
+	@SidedProxy(clientSide = "fr.Jodge.rpgWeapons.client.ClientProxy", serverSide = "fr.Jodge.rpgWeapons.common.CommonProxy")
 	public static CommonProxy proxy;
 
 	@Mod.EventHandler

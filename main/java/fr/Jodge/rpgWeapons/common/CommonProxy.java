@@ -1,4 +1,4 @@
-package fr.Jodge.rpg.weapons.common;
+package fr.Jodge.rpgWeapons.common;
 
 public class CommonProxy
 {

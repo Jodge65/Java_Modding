@@ -1,8 +1,12 @@
-package fr.Jodge.jodgeLibrary.common;
+package fr.Jodge.jodgeLibrary.common.block;
+
+import fr.Jodge.jodgeLibrary.common.Main;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 

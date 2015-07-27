@@ -1,18 +1,20 @@
-package fr.Jodge.jodgeLibrary.common.toolSet;
+package fr.Jodge.jodgeLibrary.common.extendWeapons;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import fr.Jodge.jodgeLibrary.common.CommonProxy;
-import fr.Jodge.jodgeLibrary.common.JFunction;
-import fr.Jodge.jodgeLibrary.common.JFunction.nbtVar;
+
+
 import fr.Jodge.jodgeLibrary.common.Main;
+import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
+import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.function.JNbtVar;
+
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -21,6 +23,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -77,7 +80,7 @@ public class JWeapons extends ItemSword
 	{
 		if (this.canBeRepair)
 		{
-			if ((nbtVar.readNbtVarInt(input, nbtVar.RightCombo) == 0) && (nbtVar.readNbtVarInt(input, nbtVar.LeftCombo) == 0))
+			if ((JNbtVar.readNbtVarInt(input, JNbtVar.RightCombo) == 0) && (JNbtVar.readNbtVarInt(input, JNbtVar.LeftCombo) == 0))
 			{
 				return repair.getItem() == this.ingot;
 			}
@@ -100,7 +103,7 @@ public class JWeapons extends ItemSword
 
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
-		JFunction.dealDamage(player, (EntityLivingBase) entity, 1.0F, Boolean.valueOf(false));
+		JDamageHelper.dealDamage(player, (EntityLivingBase) entity, 1.0F, Boolean.valueOf(false));
 		return true;
 	}
 
@@ -110,15 +113,15 @@ public class JWeapons extends ItemSword
         {
         	stack.setTagCompound(new NBTTagCompound());
        
-        	stack.getTagCompound().setInteger(nbtVar.RightCombo.toString(), 0); // Right Combo
-        	stack.getTagCompound().setInteger(nbtVar.RightPreviousCombo.toString(),0); // Right Previous Combo
-        	stack.getTagCompound().setInteger(nbtVar.LeftCombo.toString(), 0); // Left Combo
-        	stack.getTagCompound().setInteger(nbtVar.LeftPreviousCombo.toString(), 0); // Left Previous Combo
-        	stack.getTagCompound().setInteger(nbtVar.StartCombo.toString(),timer); // actualTimer
+        	stack.getTagCompound().setInteger(JNbtVar.RightCombo.toString(), 0); // Right Combo
+        	stack.getTagCompound().setInteger(JNbtVar.RightPreviousCombo.toString(),0); // Right Previous Combo
+        	stack.getTagCompound().setInteger(JNbtVar.LeftCombo.toString(), 0); // Left Combo
+        	stack.getTagCompound().setInteger(JNbtVar.LeftPreviousCombo.toString(), 0); // Left Previous Combo
+        	stack.getTagCompound().setInteger(JNbtVar.StartCombo.toString(),timer); // actualTimer
         }		
 		
 
-		if ((nbtVar.readNbtVarInt(stack, nbtVar.RightCombo) != 0) || (nbtVar.readNbtVarInt(stack, nbtVar.LeftCombo) != 0))
+		if ((JNbtVar.readNbtVarInt(stack, JNbtVar.RightCombo) != 0) || (JNbtVar.readNbtVarInt(stack, JNbtVar.LeftCombo) != 0))
 		{
 			
 			timer++;
@@ -129,33 +132,31 @@ public class JWeapons extends ItemSword
 			}
 			
 			// Protection against restart & limit of value
-			if(nbtVar.readNbtVarInt(stack, nbtVar.StartCombo) > timer)
+			if(JNbtVar.readNbtVarInt(stack, JNbtVar.StartCombo) > timer)
 			{
-				nbtVar.writeNbtVar(stack, nbtVar.StartCombo, timer);
+				JNbtVar.writeNbtVar(stack, JNbtVar.StartCombo, timer);
 			}
 			
-			int seconds = timer  - nbtVar.readNbtVarInt(stack, nbtVar.StartCombo);
+			int seconds = timer  - JNbtVar.readNbtVarInt(stack, JNbtVar.StartCombo);
 
 			if(seconds >= this.comboTimer)
 			{
-				JFunction.write("### ### : " + seconds + " >= " + this.comboTimer + " ?");
-
-				nbtVar.writeNbtVar(stack, nbtVar.RightCombo, 0);
-				nbtVar.writeNbtVar(stack, nbtVar.LeftCombo, 0);
-				nbtVar.writeNbtVar(stack, nbtVar.StartCombo, timer);
+				JNbtVar.writeNbtVar(stack, JNbtVar.RightCombo, 0);
+				JNbtVar.writeNbtVar(stack, JNbtVar.LeftCombo, 0);
+				JNbtVar.writeNbtVar(stack, JNbtVar.StartCombo, timer);
 			}
-			else if (	nbtVar.readNbtVarInt(stack, nbtVar.RightCombo) != nbtVar.readNbtVarInt(stack, nbtVar.RightPreviousCombo) || 
-						nbtVar.readNbtVarInt(stack, nbtVar.LeftCombo) != nbtVar.readNbtVarInt(stack, nbtVar.LeftPreviousCombo))
+			else if (	JNbtVar.readNbtVarInt(stack, JNbtVar.RightCombo) != JNbtVar.readNbtVarInt(stack, JNbtVar.RightPreviousCombo) || 
+						JNbtVar.readNbtVarInt(stack, JNbtVar.LeftCombo) != JNbtVar.readNbtVarInt(stack, JNbtVar.LeftPreviousCombo))
 			{
-				nbtVar.writeNbtVar(stack, nbtVar.StartCombo, timer);
+				JNbtVar.writeNbtVar(stack, JNbtVar.StartCombo, timer);
 			}
-			if (nbtVar.readNbtVarInt(stack, nbtVar.RightCombo) != nbtVar.readNbtVarInt(stack, nbtVar.RightPreviousCombo))
+			if (JNbtVar.readNbtVarInt(stack, JNbtVar.RightCombo) != JNbtVar.readNbtVarInt(stack, JNbtVar.RightPreviousCombo))
 			{
-				nbtVar.writeNbtVar(stack, nbtVar.RightPreviousCombo, nbtVar.readNbtVarInt(stack, nbtVar.RightCombo));
+				JNbtVar.writeNbtVar(stack, JNbtVar.RightPreviousCombo, JNbtVar.readNbtVarInt(stack, JNbtVar.RightCombo));
 			}
-			if (nbtVar.readNbtVarInt(stack, nbtVar.LeftCombo) != nbtVar.readNbtVarInt(stack, nbtVar.LeftPreviousCombo))
+			if (JNbtVar.readNbtVarInt(stack, JNbtVar.LeftCombo) != JNbtVar.readNbtVarInt(stack, JNbtVar.LeftPreviousCombo))
 			{
-				nbtVar.writeNbtVar(stack, nbtVar.LeftPreviousCombo, nbtVar.readNbtVarInt(stack, nbtVar.LeftCombo));
+				JNbtVar.writeNbtVar(stack, JNbtVar.LeftPreviousCombo, JNbtVar.readNbtVarInt(stack, JNbtVar.LeftCombo));
 			}
 		}
 	}
