@@ -7,6 +7,7 @@ import com.google.common.collect.Multimap;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.function.JLog;
 import fr.Jodge.jodgeLibrary.common.function.JNbtVar;
 
 import net.minecraft.block.Block;
@@ -22,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -37,10 +39,12 @@ public class JWeapons extends ItemSword
 	protected String modid;
 	protected boolean isGoodbombo;
 	
+	public boolean multiCombo = false;
 	public int timer = 0;
-	
 	public int comboTimer;
 
+	public static final int clicSpeed = 10;
+	
 	public JWeapons(String name, Item.ToolMaterial toolData, String modid)
 	{
 		super(toolData);
@@ -84,7 +88,6 @@ public class JWeapons extends ItemSword
 			{
 				return repair.getItem() == this.ingot;
 			}
-			return false;
 		}
 		return false;
 	}
@@ -111,15 +114,8 @@ public class JWeapons extends ItemSword
 	{
 		if(stack.getTagCompound() == null)
         {
-        	stack.setTagCompound(new NBTTagCompound());
-       
-        	stack.getTagCompound().setInteger(JNbtVar.RightCombo.toString(), 0); // Right Combo
-        	stack.getTagCompound().setInteger(JNbtVar.RightPreviousCombo.toString(),0); // Right Previous Combo
-        	stack.getTagCompound().setInteger(JNbtVar.LeftCombo.toString(), 0); // Left Combo
-        	stack.getTagCompound().setInteger(JNbtVar.LeftPreviousCombo.toString(), 0); // Left Previous Combo
-        	stack.getTagCompound().setInteger(JNbtVar.StartCombo.toString(),timer); // actualTimer
+        	initialiseTag(stack);
         }		
-		
 
 		if ((JNbtVar.readNbtVarInt(stack, JNbtVar.RightCombo) != 0) || (JNbtVar.readNbtVarInt(stack, JNbtVar.LeftCombo) != 0))
 		{
@@ -160,7 +156,22 @@ public class JWeapons extends ItemSword
 			}
 		}
 	}
+	
+    public void initialiseTag(ItemStack stack)
+	{
+    	stack.setTagCompound(new NBTTagCompound());
+    	stack.getTagCompound().setInteger(JNbtVar.RightCombo.toString(), 0); // Right Combo
+    	stack.getTagCompound().setInteger(JNbtVar.RightPreviousCombo.toString(),0); // Right Previous Combo
+    	stack.getTagCompound().setInteger(JNbtVar.LeftCombo.toString(), 0); // Left Combo
+    	stack.getTagCompound().setInteger(JNbtVar.LeftPreviousCombo.toString(), 0); // Left Previous Combo
+    	stack.getTagCompound().setInteger(JNbtVar.StartCombo.toString(),timer); // actualTimer		
+	}
 
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+    {
+        return false;
+    }
+    
 	public Item getIngot()
 	{
 		return this.ingot;

@@ -10,6 +10,7 @@ import fr.Jodge.jodgeLibrary.common.function.JNbtVar;
 import fr.Jodge.jodgeLibrary.common.function.JRenderHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,7 +39,6 @@ public class JScreen extends Gui
 	private static float YELLOW_BAR = 1.0F;
 
 	private static EntityPlayer player;
-	private static Item item;
 
 	private static Minecraft MC = Minecraft.getMinecraft();;
 
@@ -62,9 +62,12 @@ public class JScreen extends Gui
 
 		int limMax = player.openContainer.getInventory().size(); // maximum size of inventory		
 		ScaledResolution sr = new ScaledResolution(MC, MC.displayWidth, MC.displayHeight); // actual resolution
-		int y = sr.getScaledHeight() - HEIGHT - 3;
 		int x = 0;
-
+		int y = sr.getScaledHeight() - HEIGHT - 3;
+		int xString = sr.getScaledWidth() / 2;
+		int yString = y - 27;
+		int corrString = 2;
+		
 		// ################################################
 		GlStateManager.pushMatrix();
 		// GlStateManager.disableLighting();
@@ -81,7 +84,7 @@ public class JScreen extends Gui
 			
 			if (itemStack != null)
 			{
-				item = itemStack.getItem();
+				Item item = itemStack.getItem();
 
 				if (item instanceof JWeapons)
 				{
@@ -90,22 +93,47 @@ public class JScreen extends Gui
 					{
 						int comboTimer = ((JWeapons) item).comboTimer;
 						int actualTimer = ((JWeapons) item).timer - JNbtVar.readNbtVarInt(itemStack, JNbtVar.StartCombo);
+											
 						double width = (((comboTimer - Math.min(comboTimer, actualTimer)) * WIDTH) / comboTimer);
-
+						
 						if (actualTimer != 0)
 						{
-							Minecraft.getMinecraft().renderEngine.bindTexture(TIMERTEXTURE);
+							MC.renderEngine.bindTexture(TIMERTEXTURE);
 							JRenderHelper.drawTexturedModalRect(x, y, 1.0F, 0, 0, (int) width, HEIGHT);
 						}
 					}
 
-
-
-				} // end of item instanceof JWeapons
+				}// end of item instanceof JWeapons
 
 			}// end of itemStack != null
 
 		}// end of for
+		
+		if(!player.capabilities.isCreativeMode)
+		{
+			ItemStack itemStack = player.getCurrentEquippedItem();
+			if (itemStack != null)
+			{
+				Item item = itemStack.getItem();
+				if (item instanceof JWeapons)
+				{
+					int rightCombo = JNbtVar.readNbtVarInt(itemStack, JNbtVar.RightCombo);
+					int leftCombo = JNbtVar.readNbtVarInt(itemStack, JNbtVar.LeftCombo);
+					
+					FontRenderer fr = MC.fontRendererObj;
+					if(((JWeapons)item).multiCombo)
+					{
+						fr.drawStringWithShadow("" + rightCombo, xString + corrString, yString, 0xFFFFFF);
+						fr.drawStringWithShadow("" + leftCombo, xString - corrString - fr.getStringWidth("" + leftCombo), yString, 0xFFFFFF);
+					}
+					else
+					{
+						fr.drawStringWithShadow("" + (leftCombo+rightCombo), xString - fr.getStringWidth("" + (leftCombo+rightCombo)) / 2, yString, 0xFFFFFF);
+					}
+				}// end of item instanceof JWeapons
+			}// end of itemStack != null
+		}
+
 		// ################################################
 		// GlStateManager.enableBlend();
 		// GlStateManager.enableAlpha();
@@ -115,15 +143,8 @@ public class JScreen extends Gui
 		GlStateManager.popMatrix();
 		// ################################################
 		
-		
 	} // RenderGameOverlayEvent(post)
-	public void onRenderSelecteur(RenderGameOverlayEvent.Post event)
-	{
-		if (event.isCancelable() || event.type != ElementType.HOTBAR)
-		{
-			return;
-		}
-	}
+
 	
 	int getXforSlot(int slot, int nbSlot)
 	{
