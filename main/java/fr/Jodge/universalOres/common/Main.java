@@ -52,7 +52,7 @@ public class Main
 		Item copperAxe = new JAxe("Copper axe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 		Item copperShovel = new JSpade("Copper shovel", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 		Item copperHoe = new JHoe("Copper hoe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
-		Item copperScythe = new JScythe("Copper scythe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
+		//Item copperScythe = new JScythe("Copper scythe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 	}
 
 	@Mod.EventHandler

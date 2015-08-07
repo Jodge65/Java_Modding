@@ -9,12 +9,8 @@ public enum JNbtVar
 	RightPreviousCombo("rPC"), 
 	LeftCombo("lC"), 
 	LeftPreviousCombo("lPC"), 
-	StartCombo("sC"),
-	
-	posCenterAreaX("pCAx"),
-	posCenterAreaY("pCAy"),
-	posCenterAreaZ("pCAz");
-	
+	StartCombo("sC");
+		
 	private String name = "";
 
 	JNbtVar(String name)
@@ -55,28 +51,11 @@ public enum JNbtVar
 			if (itemData.hasKey(varName))
 			{
 				write(stack, varName, value);
-				//stack.getTagCompound().setInteger(varName, value);
 				isWrite = true;
 			}
 		}
 		return isWrite;
 	}
-	
-/*	public static boolean writeNbtVar(ItemStack stack, JNbtVar var, double value)
-	{
-		boolean isWrite = false;
-		if (stack.hasTagCompound())
-		{
-			NBTTagCompound itemData = stack.getTagCompound();
-			String varName = var.toString();
-			if (itemData.hasKey(varName))
-			{
-				stack.getTagCompound().setDouble(varName, value);
-				isWrite = true;
-			}
-		}
-		return isWrite;
-	}*/
 	
 	public static boolean incNbtVarInt(ItemStack stack, JNbtVar var)
 	{

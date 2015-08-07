@@ -1,4 +1,4 @@
-package fr.Jodge.jodgeLibrary.common.function;
+package fr.Jodge.jodgeLibrary.common.Area;
 
 import java.util.ArrayList;
 import java.util.List;

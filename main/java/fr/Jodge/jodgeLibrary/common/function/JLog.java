@@ -16,7 +16,7 @@ public class JLog
 		}
 	}
 
-	public static void writeLog(String text)
+	private static void writeLog(String text)
 	{
 		System.out.println(text);
 	}

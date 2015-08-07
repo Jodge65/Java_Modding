@@ -36,14 +36,15 @@ public class Main
 	{
 		proxy.registerRender();
 
-		Item stoneScythe = new JScythe("Stone scythe", Blocks.cobblestone, Item.ToolMaterial.STONE, "rpgweapons").activeAutoCraftingRecipe();
-		Item ironScythe = new JScythe("Iron scythe", Items.iron_ingot, Item.ToolMaterial.IRON, "rpgweapons").activeAutoCraftingRecipe();
-		Item goldScythe = new JScythe("Gold scythe", Items.gold_ingot, Item.ToolMaterial.GOLD, "rpgweapons").activeAutoCraftingRecipe();
-		Item diamondScythe = new JScythe("Diamond scythe", Items.diamond, Item.ToolMaterial.EMERALD, "rpgweapons").activeAutoCraftingRecipe();
+		Item stoneScythe = new JScythe("Stone scythe", Blocks.cobblestone, Item.ToolMaterial.STONE, "rpgweapons").activeAutoCraftingRecipe().setRayonArea(5);
+		Item ironScythe = new JScythe("Iron scythe", Items.iron_ingot, Item.ToolMaterial.IRON, "rpgweapons").activeAutoCraftingRecipe().setRayonArea(10);
+		Item goldScythe = new JScythe("Gold scythe", Items.gold_ingot, Item.ToolMaterial.GOLD, "rpgweapons").activeAutoCraftingRecipe().setRayonArea(20);
+		Item diamondScythe = new JScythe("Diamond scythe", Items.diamond, Item.ToolMaterial.EMERALD, "rpgweapons").activeAutoCraftingRecipe().setRayonArea(50);
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
+		
 	}
 }

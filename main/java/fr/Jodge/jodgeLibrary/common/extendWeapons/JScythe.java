@@ -1,7 +1,9 @@
 package fr.Jodge.jodgeLibrary.common.extendWeapons;
 
 import fr.Jodge.jodgeLibrary.common.Main;
-import fr.Jodge.jodgeLibrary.common.function.JAreaHelper;
+import fr.Jodge.jodgeLibrary.common.Area.JAreaHelper;
+import fr.Jodge.jodgeLibrary.common.Area.JCircle;
+import fr.Jodge.jodgeLibrary.common.Area.JDome;
 import fr.Jodge.jodgeLibrary.common.function.JBlockHelper;
 import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
@@ -16,6 +18,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockStone;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -37,19 +40,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class JScythe extends JWeapons
 {
-	private static final long start = System.currentTimeMillis() / 1000;
-	private static int seconds = 0;
-	public static int fireColumn;
+	// private static final long start = System.currentTimeMillis() / 1000;
+	// private static int seconds = 0;
 
-	private static int rayonArea;
+	public int fireColumn;
+	private int rayonArea;
 
 	public JScythe(String name, Item ingot, Item.ToolMaterial toolData, String modid)
 	{
 		super(name, ingot, toolData, modid);
 		setBonusDamage(5.0F);
 		comboTimer = 5 * 20;
-		fireColumn = 50;
-		rayonArea = 5;
+		fireColumn = 1;
+		rayonArea = 4;
 
 		Main.proxy.registerItemTexture(this, 1, getUnlocalizedNameAlone() + "Using", modid);
 		Main.proxy.registerItemTexture(this, 1, getUnlocalizedNameAlone() + "UsingSneaking", modid);
@@ -94,125 +97,6 @@ public class JScythe extends JWeapons
 	{
 		comboTimer = value;
 		return this;
-	}
-
-    public void initialiseTag(ItemStack stack)
-	{
-    	super.initialiseTag(stack);
-		stack.getTagCompound().setInteger(JNbtVar.posCenterAreaX.toString(), 0); // Right Combo
-		stack.getTagCompound().setInteger(JNbtVar.posCenterAreaY.toString(), 0); // Right Previous Combo
-		stack.getTagCompound().setInteger(JNbtVar.posCenterAreaZ.toString(), 0); // Left Combo
-	}
-	
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
-	{
-		if(stack.getTagCompound() == null)
-        {
-        	initialiseTag(stack);
-        }	
-
-
-		if (seconds != (int) (System.currentTimeMillis() / 1000 - start))
-		{
-			if(!worldIn.isRemote)
-			{
-				if (	JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaX) != 0 || 
-						JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaY) != 0 || 
-						JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaZ) != 0)
-				{
-					AxisAlignedBB area = JAreaHelper.circleArea(JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaX), 
-																JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaY), 
-																JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaZ), 
-																JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaX), 
-																JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaY) + fireColumn, 
-																JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaZ),
-																(double) rayonArea);
-					JLog.write("### : " + area);
-					EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-					World world = player.worldObj;
-					
-					ArrayList entityInArea = Lists.newArrayList();
-					
-					int xMin = MathHelper.floor_double(area.minX);
-					int xMax = MathHelper.floor_double(area.maxX);
-					int zMin = MathHelper.floor_double(area.minZ);
-					int zMax = MathHelper.floor_double(area.maxZ);
-					int yMin = MathHelper.floor_double(area.minY);
-
-					List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); 
-									
-					for (int x = 0; x < xMax - xMin; ++x)
-					{
-						areaBool.add(new ArrayList<Boolean>());
-
-						for (int z = 0; z <= zMax - zMin; ++z)
-						{
-							JLog.write(" #" + x + z + "# ");
-
-							areaBool.get(x).add(true); 
-						}
-					}
-					List entityList;
-
-					for (int y = 0; y < fireColumn; y++)
-					{
-						area = JAreaHelper.circleArea(JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaX), JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaY) + y, JNbtVar.readNbtVarDouble(stack, JNbtVar.posCenterAreaZ), (double) rayonArea);
-						for (int x = 0; x < xMax - xMin; ++x)
-						{
-							for (int z = 0; z < zMax - zMin; ++z)
-							{
-								if (areaBool.get(x).get(z))
-								{
-									ArrayList whereIsEnitytInList = Lists.newArrayList();
-									Block block = world.getBlockState(new BlockPos(xMin + x, yMin + y, zMin + z)).getBlock();
-									if (block.isAir(world, new BlockPos(xMin + x, yMin + y, zMin + z)) ||
-										block instanceof BlockBush)
-									{
-										List currentEntityList = JAreaHelper.getEntityInArea(player, new AxisAlignedBB(xMin + x, y, zMin + z, xMin + x + 1, yMin + y + 1, zMin + z + 1));
-										int numberOfEntity = currentEntityList.size();
-										int numberOfEntityInArea = entityInArea.size();
-										for(int i = 0; i < numberOfEntity; i++)
-										{
-											if(entityInArea.get(i) instanceof EntityLivingBase && entityInArea.get(i) != null)
-											{
-
-												Entity entity = (Entity) entityInArea.get(i);
-												boolean canBeAdd = true;
-
-												for(int i1 = 0; i1 < numberOfEntityInArea; i1++)
-												{
-													if(entity.equals(currentEntityList.get(i1)))
-													{
-														canBeAdd = false;
-														break;
-													}
-												}
-												
-												if(canBeAdd)
-												{
-													entityInArea.add(entity);
-												}
-											}
-										}
-									} // if block is air
-									else
-									{
-										areaBool.get(x).set(z, false);
-									}
-								} // if[x][z] = true
-							} // for Y
-						} // for X
-						entityList = JAreaHelper.getEntityInArea(player, area);
-						JDamageHelper.fireMultiplerEntity(player, entityList, 1);
-
-					}
-				} // if x, y, z
-
-			}
-			seconds = (int) (System.currentTimeMillis() / 1000 - start);
-		}
-
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 	}
 
 	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
@@ -386,16 +270,99 @@ public class JScythe extends JWeapons
 		JDamageHelper.dealMultipleDamage(player, JAreaHelper.getEntityInArea(player, bonus), damageMultiplier, false);
 	}
 
-	private void rightHit1(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
+	private void rightHit1(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 	{
+		int xMin = Math.round(player.getPosition().getX() - rayonArea);
+		int xMax = Math.round(player.getPosition().getX() + rayonArea);
+		int zMin = Math.round(player.getPosition().getZ() - rayonArea);
+		int zMax = Math.round(player.getPosition().getZ() + rayonArea);
+		int yMin = Math.round(player.getPosition().getY());
+		int yMax = Math.round(player.getPosition().getY() + rayonArea);
+
+		List<List<List<Boolean>>> areaBool = new ArrayList<List<List<Boolean>>>(); // Tab of boolean
+		List<List<List<Boolean>>> areaExtrudBool = new ArrayList<List<List<Boolean>>>(); // Tab of boolean
+		areaBool.addAll(JDome.dome(rayonArea));
+		areaExtrudBool = JDome.extrudeDome(areaBool, rayonArea);
+		//areaBool.addAll(JDome.dome(rayonArea - 1, rayonArea*2+1));
+
+		int rayonOfDome = rayonArea*2 + 1;
+		
+		for (int y = 0; y <= rayonArea; y++)
+		{ // pour chaque étage
+			//JLog.write("#LINE# y :" + y + ", VALUE : " + areaExtrudBool.get(y));
+
+			for (int x = 0; x <= xMax - xMin; x++)
+			{ // je lis X
+				//JLog.write("#LINE# x :" + x + ", VALUE : " + areaExtrudBool.get(y).get(x));
+
+				for (int z = 0; z <= zMax - zMin; z++)
+				{ // puis Z
+					//JLog.write("#VALUE# :" + areaBool.get(y).get(x));
+
+					//if (areaExtrudBool.get(y).get(x).get(z))
+					BlockPos posOfBlock = new BlockPos(xMin + x, yMin + y, zMin + z);
+
+					if (areaExtrudBool.get(y).get(x).get(z))
+					{
+						Block block = world.getBlockState(posOfBlock).getBlock();
+						world.setBlockState(posOfBlock, Blocks.stone.getDefaultState());
+					} // if[x][z] = true
+					else
+					{
+						world.setBlockState(posOfBlock, Blocks.glass.getDefaultState());
+					}
+
+				} // end of for z
+			} // end of for x
+		} // end of for y
 
 	}
 
-	private void rightHit2(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
+	private void rightHit2(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 	{
-		JNbtVar.writeNbtVar(stack, JNbtVar.posCenterAreaX, player.posX);
-		JNbtVar.writeNbtVar(stack, JNbtVar.posCenterAreaY, player.posY);
-		JNbtVar.writeNbtVar(stack, JNbtVar.posCenterAreaZ, player.posZ);
+		int xMin = Math.round(player.getPosition().getX() - rayonArea);
+		int xMax = Math.round(player.getPosition().getX() + rayonArea);
+		int zMin = Math.round(player.getPosition().getZ() - rayonArea);
+		int zMax = Math.round(player.getPosition().getZ() + rayonArea);
+
+		int yMin = Math.round(player.getPosition().getY());
+
+		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean
+		areaBool = JCircle.circle(rayonArea);
+
+		for (int i = 0; i < rayonArea * 2 + 1; i++)
+		{
+			JLog.write("### : " + areaBool.get(i));
+		}
+
+		for (int y = 0; y < fireColumn; y++)
+		{
+			for (int x = 0; x <= xMax - xMin; x++)
+			{
+				for (int z = 0; z <= zMax - zMin; z++)
+				{
+					if (areaBool.get(x).get(z))
+					{
+
+						BlockPos posOfBlock = new BlockPos(xMin + x, yMin + y, zMin + z);
+						Block block = world.getBlockState(posOfBlock).getBlock();
+						if (block.isAir(world, posOfBlock) || block instanceof BlockBush)
+						{
+							world.setBlockState(posOfBlock, Blocks.stone.getDefaultState());
+						} // if block is air
+						else
+						{
+							areaBool.get(x).set(z, false);
+						}
+					} // if[x][z] = true
+
+					// if(y == 0)
+					// JLog.write("APRES : X = " + xMin + x + ", z = " + zMin + z + " Value = " + areaBool.get(x).get(z));
+
+				} // for Z
+			} // for X
+		} // for Y
+
 	}
 
 	private void rightHit3(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)

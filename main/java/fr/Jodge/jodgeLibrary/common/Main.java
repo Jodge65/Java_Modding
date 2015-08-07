@@ -1,6 +1,12 @@
 package fr.Jodge.jodgeLibrary.common;
 
+import fr.Jodge.jodgeLibrary.common.Area.JSchema;
+import fr.Jodge.jodgeLibrary.common.block.JBlock;
+import fr.Jodge.jodgeLibrary.common.block.JFireBlock;
+import fr.Jodge.jodgeLibrary.common.block.JMaterial;
 import fr.Jodge.jodgeLibrary.proxy.CommonProxy;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -44,10 +50,14 @@ public class Main
 		{
 			
 		}
+		
+		//Block jFire = new JFireBlock();
+
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
+
 	}
 }
