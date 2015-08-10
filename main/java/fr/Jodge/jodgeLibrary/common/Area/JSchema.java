@@ -13,7 +13,6 @@ import fr.Jodge.jodgeLibrary.common.function.JLog;
 
 public class JSchema
 {
-	public static final int LIMITE_RAYON_CIRCLE = 10;
 	
 	public static List<Boolean> line(int... value)
 	{

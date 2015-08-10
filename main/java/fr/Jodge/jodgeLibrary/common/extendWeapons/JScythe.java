@@ -4,6 +4,7 @@ import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.Area.JAreaHelper;
 import fr.Jodge.jodgeLibrary.common.Area.JCircle;
 import fr.Jodge.jodgeLibrary.common.Area.JDome;
+import fr.Jodge.jodgeLibrary.common.block.JBlock;
 import fr.Jodge.jodgeLibrary.common.function.JBlockHelper;
 import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
@@ -281,7 +282,7 @@ public class JScythe extends JWeapons
 
 		List<List<List<Boolean>>> areaBool = new ArrayList<List<List<Boolean>>>(); // Tab of boolean
 		List<List<List<Boolean>>> areaExtrudBool = new ArrayList<List<List<Boolean>>>(); // Tab of boolean
-		areaBool.addAll(JDome.dome(rayonArea));
+		areaBool.addAll(JDome.createDome(rayonArea));
 		areaExtrudBool = JDome.extrudeDome(areaBool, rayonArea);
 		//areaBool.addAll(JDome.dome(rayonArea - 1, rayonArea*2+1));
 
@@ -305,12 +306,12 @@ public class JScythe extends JWeapons
 					if (areaExtrudBool.get(y).get(x).get(z))
 					{
 						Block block = world.getBlockState(posOfBlock).getBlock();
-						world.setBlockState(posOfBlock, Blocks.stone.getDefaultState());
-					} // if[x][z] = true
-					else
-					{
-						world.setBlockState(posOfBlock, Blocks.glass.getDefaultState());
-					}
+						if(block.isAir(world, posOfBlock) || block instanceof BlockBush) 
+						{ 
+							world.setBlockState(posOfBlock, JBlock.fire.getDefaultState());
+						}
+					} // end of if[x][z] = true
+
 
 				} // end of for z
 			} // end of for x
@@ -328,7 +329,7 @@ public class JScythe extends JWeapons
 		int yMin = Math.round(player.getPosition().getY());
 
 		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean
-		areaBool = JCircle.circle(rayonArea);
+		areaBool = JCircle.createCircle(rayonArea);
 
 		for (int i = 0; i < rayonArea * 2 + 1; i++)
 		{

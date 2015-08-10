@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "rpgweapons", name = "RPG Weapons", version = "A0.1.0", dependencies = "after:jodgelibrary", acceptedMinecraftVersions = "[1.8]")
+@Mod(modid = "rpgweapons", name = "RPG Weapons", version = "A0.1.0", dependencies = "required-after:jodgelibrary", acceptedMinecraftVersions = "[1.8]")
 public class Main
 {
 	public static final String MODID = "rpgweapons";

@@ -7,28 +7,45 @@ import fr.Jodge.jodgeLibrary.common.function.JLog;
 
 public class JCircle extends JSchema
 {
-
-	/*public final static List<List<Boolean>> circle_1  = circle(1 );
-	public final static List<List<Boolean>> circle_2  = circle(2 );
-	public final static List<List<Boolean>> circle_3  = circle(3 );
-	public final static List<List<Boolean>> circle_4  = circle(4 );
-	public final static List<List<Boolean>> circle_5  = circle(5 );
-	public final static List<List<Boolean>> circle_6  = circle(6 );
-	public final static List<List<Boolean>> circle_7  = circle(7 );
-	public final static List<List<Boolean>> circle_8  = circle(8 );
-	public final static List<List<Boolean>> circle_9  = circle(9 );
-	public final static List<List<Boolean>> circle_10 = circle(10);*/
+	public List<List<Boolean>> circle;
+	public int rayon;
+	//private static List<JCircle> allCircle = new ArrayList<JCircle>();
+	public static final int LIMITE_RAYON_CIRCLE_GENERATE = 10;
 	
-	public static List<List<Boolean>> circle(int rayon)
+	public JCircle(int rayon)
 	{
-		return circle(rayon, rayon * 2 + 1);
+		this(rayon, rayon * 2 + 1);
+	}
+	public JCircle(int rayon, int gridSize)
+	{
+		this(rayon, gridSize, false);
+	}	
+	public JCircle(int rayon, int gridSize, boolean forceGenerate)
+	{
+		circle = createCircle(rayon, gridSize, forceGenerate);
+		this.rayon = rayon;
 	}
 	
-	public static List<List<Boolean>> circle(int rayon, int gridSize)
+	public List<List<Boolean>> getCircle()
 	{
-		return circle(rayon, gridSize, false);
+		return circle;
 	}
-	public static List<List<Boolean>> circle(int rayon, int gridSize, boolean forceGenerate)
+	public int getRayon()
+	{
+		return rayon;
+	}
+	
+	
+	public static List<List<Boolean>> createCircle(int rayon)
+	{
+		return createCircle(rayon, rayon * 2 + 1);
+	}
+	
+	public static List<List<Boolean>> createCircle(int rayon, int gridSize)
+	{
+		return createCircle(rayon, gridSize, false);
+	}
+	public static List<List<Boolean>> createCircle(int rayon, int gridSize, boolean forceGenerate)
 	{
 
 		
@@ -201,21 +218,14 @@ public class JCircle extends JSchema
 			default:
 				if(rayon != 0)
 				{
-					for (int x = 0; x <= rayon * 2; ++x)
+					/*if(tryReadCircle(rayon))
 					{
-						areaBool.add(new ArrayList<Boolean>());
-						for (int z = 0; z <= rayon * 2; ++z)
-						{
-							if ((Math.pow(x - rayon, 2) + Math.pow(z - rayon, 2)) <= Math.pow(rayon + 0.1F, 2))
-							{
-								areaBool.get(x).add(true);
-							}
-							else
-							{
-								areaBool.get(x).add(false);
-							}
-						}
+						areaBool = getCircleUnsecure(rayon);
 					}
+					else
+					{*/
+						areaBool = generateCircle(rayon);
+					//}
 				}
 				else
 				{
@@ -227,5 +237,73 @@ public class JCircle extends JSchema
 
 		return adaptOnGrid(areaBool, gridSize, actualGridSize);
 	}
+
+	private static List<List<Boolean>> generateCircle(int rayon)
+	{
+		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean
+
+		for (int x = 0; x <= rayon * 2; ++x)
+		{
+			areaBool.add(new ArrayList<Boolean>());
+			for (int z = 0; z <= rayon * 2; ++z)
+			{
+				if ((Math.pow(x - rayon, 2) + Math.pow(z - rayon, 2)) <= Math.pow(rayon + 0.1F, 2))
+				{
+					areaBool.get(x).add(true);
+				}
+				else
+				{
+					areaBool.get(x).add(false);
+				}
+			}
+		}
+		//addCircleToList(rayon, areaBool);
+		
+		return areaBool;
+	}
+	
+	/*private static void addCircleToList(int rayon, List<List<Boolean>> areaBool)
+	{
+		int maxCircle = allCircle.size();
+		for(int i = maxCircle; i < rayon; i++)
+		{
+			allCircle.add(null);
+		}
+		allCircle.set(rayon, new JCircle(rayon));
+	}*/
+	/*public static boolean tryReadCircle(int rayon)
+	{
+		boolean exist = true;
+		if(rayon > 0)
+		{
+			try 
+			{
+				allCircle.get(rayon);
+			}
+			catch(IndexOutOfBoundsException e)
+			{
+				exist = false;
+			}
+		}
+		else
+		{
+			exist = false;
+		}
+		
+		return exist;
+	}*/
+	
+	/*private static List<List<Boolean>> getCircleUnsecure(int rayon)
+	{ 
+		return allCircle.get(rayon).getCircle();
+	}*/
+	
+	/*public static List<List<Boolean>> getCircle(int rayon)
+	{ 
+		if(tryReadCircle(rayon))
+			return getCircleUnsecure(rayon);
+		else
+			return null;
+	}*/
 
 }

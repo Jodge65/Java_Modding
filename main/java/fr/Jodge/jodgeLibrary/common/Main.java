@@ -51,7 +51,6 @@ public class Main
 			
 		}
 		
-		//Block jFire = new JFireBlock();
 
 	}
 
