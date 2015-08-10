@@ -59,7 +59,7 @@ public class JFireBlock extends JFallingBlock
 			}
 			else
 			{
-				if(block instanceof BlockBush || block instanceof BlockStaticLiquid || block instanceof JFireBlock)
+				if( (block instanceof BlockBush || block instanceof JFireBlock) && !(block instanceof BlockStaticLiquid) )
 				{
 					canFall = true;
 				}
