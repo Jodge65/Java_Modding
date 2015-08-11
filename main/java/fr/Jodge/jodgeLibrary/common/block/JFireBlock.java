@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.function.JLog;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -35,8 +36,8 @@ public class JFireBlock extends JFallingBlock
 
 	public JFireBlock()
 	{
-		super(Material.fire, "Fall Fire", Main.MODID, "firefall");
-
+		super(Material.fire, "Fire", "minecraft", "fire");
+		CanDownOnWater(false);
 	}
 
 	public int tickRate(World worldIn)
@@ -45,24 +46,31 @@ public class JFireBlock extends JFallingBlock
 	}
 
 	// -- FALLING --- //
-	public static boolean canFallInto(World worldIn, BlockPos pos)
+	public boolean canFallIntoBlock(World worldIn, BlockPos pos)
 	{
 		boolean canFall = false;
+		Block block = worldIn.getBlockState(pos).getBlock();
+		Material material = block.getMaterial();
+		
 		if (worldIn.isAirBlock(pos))
 		{
-			Block block = worldIn.getBlockState(pos).getBlock();
-			Material material = block.getMaterial();
-			
 			if(material == Material.fire || material == Material.air)
 			{
 				canFall = true;
 			}
 			else
 			{
-				if( (block instanceof BlockBush || block instanceof JFireBlock) && !(block instanceof BlockStaticLiquid) )
+				if( !(material == Material.water || material == Material.lava))
 				{
 					canFall = true;
 				}
+			}
+		}
+		else
+		{
+			if(block instanceof JFireBlock  || block instanceof BlockBush)
+			{
+				canFall = true;
 			}
 		}
 		
@@ -74,61 +82,21 @@ public class JFireBlock extends JFallingBlock
 		if (!worldIn.isRemote)
 		{
 			this.checkFallable(worldIn, pos);
-		}
-	}
-
-	private void checkFallable(World worldIn, BlockPos pos)
-	{
-		if (canFallInto(worldIn, pos.down()) && pos.getY() >= 0)
-		{
-			byte b0 = 32;
-
-			if (!fallInstantly && worldIn.isAreaLoaded(pos.add(-b0, -b0, -b0), pos.add(b0, b0, b0)))
-			{
-				if (!worldIn.isRemote)
-				{
-					EntityFallingBlock entityfallingblock = new EntityFallingBlock(worldIn, (double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, worldIn.getBlockState(pos));
-					this.onStartFalling(entityfallingblock);
-					worldIn.spawnEntityInWorld(entityfallingblock);
-				}
-			}
-			else
+			if(!canFallIntoBlock(worldIn, pos.down()))
 			{
 				worldIn.setBlockToAir(pos);
-				BlockPos blockpos1 = pos.down();
-				Block blockWhereFall;
-				
-				while (true)
-				{
-					blockpos1 = blockpos1.down();
-					blockWhereFall = worldIn.getBlockState(blockpos1).getBlock();
-					
-					if ( !(canFallInto(worldIn, blockpos1) && blockpos1.getY() > 0))
-					{
-						break;
-					}
-					
-					try
-					{
-						wait(15);
-					}
-					catch (InterruptedException e)
-					{
-						;
-					}
-				}
-
-				if (blockpos1.getY() > 0)
-				{
-					worldIn.setBlockState(blockpos1.up(), this.getDefaultState());
-				}
 			}
 		}
 	}
+
 
 	public void onEndFalling(World worldIn, BlockPos pos)
 	{
 		worldIn.setBlockState(pos, Blocks.fire.getDefaultState());
+		if(worldIn.getBlockState(pos.down()).getBlock() == Blocks.grass)
+		{
+			worldIn.setBlockState(pos.down(), Blocks.dirt.getDefaultState());
+		}
 	}
 
 	// -- FIRE --- //
