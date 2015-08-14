@@ -38,7 +38,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+/**
+ * @author Jodge
+ * 
+ */
 public class JScythe extends JWeapons
 {
 	// private static final long start = System.currentTimeMillis() / 1000;
@@ -55,8 +58,8 @@ public class JScythe extends JWeapons
 		fireColumn = 1;
 		rayonArea = 4;
 
-		Main.proxy.registerItemTexture(this, 1, getUnlocalizedNameAlone() + "Using", modid);
-		Main.proxy.registerItemTexture(this, 1, getUnlocalizedNameAlone() + "UsingSneaking", modid);
+		Main.proxy.registerTexture(this, 1, getUnlocalizedNameAlone() + "Using", modid);
+		Main.proxy.registerTexture(this, 1, getUnlocalizedNameAlone() + "UsingSneaking", modid);
 
 		Main.proxy.multiTexture(this, new String[] { getModid() + ":" + getUnlocalizedNameAlone(), getModid() + ":" + getUnlocalizedNameAlone() + "Using", getModid() + ":" + getUnlocalizedNameAlone() + "UsingSneaking" });
 	}
@@ -308,7 +311,7 @@ public class JScythe extends JWeapons
 						Block block = world.getBlockState(posOfBlock).getBlock();
 						if(block.isAir(world, posOfBlock) || block instanceof BlockBush) 
 						{ 
-							world.setBlockState(posOfBlock, JBlock.fire.getDefaultState());
+							world.setBlockState(posOfBlock, Main.fire.getDefaultState());
 						}
 					} // end of if[x][z] = true
 

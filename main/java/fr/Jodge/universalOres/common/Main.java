@@ -46,7 +46,7 @@ public class Main
 
 		proxy.registerRender();
 		Block copperOre = new JBlock(JMaterial.cloud, "Copper ore", "universalores").setCreativeTab(CreativeTabs.tabBlock);
-		Item copperIngot = new JItem().createIngot("universalores", "Copper Ingot").setCreativeTab(CreativeTabs.tabBlock);
+		Item copperIngot = new JItem("Copper Ingot", "universalores").setCreativeTab(CreativeTabs.tabBlock);
 		Item copperSword = new JSword("Copper sword", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 		Item copperPickaxe = new JPickaxe("Copper pickaxe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 		Item copperAxe = new JAxe("Copper axe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();

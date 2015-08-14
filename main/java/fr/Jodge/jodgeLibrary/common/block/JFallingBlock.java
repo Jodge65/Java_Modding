@@ -1,5 +1,6 @@
 package fr.Jodge.jodgeLibrary.common.block;
 
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.entity.JEntityFallingBlock;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
@@ -14,11 +15,15 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-public class JFallingBlock extends BlockFalling
+/**
+ * @author Jodge
+ * 
+ */
+public class JFallingBlock extends BlockFalling implements JCommonCreate
 {
-	private String oreDictionnaryName;
+	public String oreDictionaryName;
 	public boolean canDownInLiquid = true;
+	
 	public JFallingBlock(Material material, String name, String modid)
 	{
 		this(material, name, modid, "");
@@ -26,18 +31,18 @@ public class JFallingBlock extends BlockFalling
 
 	public JFallingBlock(Material material, String name, String modid, String oreDictionnaryName)
 	{
+		this(material, name, modid, modid, name, oreDictionnaryName);
+	}
+	
+	public JFallingBlock(Material material, String name, String modid, String textureModid, String textureName)
+	{
+		this(material, name, modid, textureModid, textureName, "");
+	}
+	
+	public JFallingBlock(Material material, String name, String modid, String textureModid, String textureName, String oreDictionnaryName)
+	{
 		super(material);
-		String m = JFunction.convertNameToUnLocalizedName(name);
-		setUnlocalizedName(m);
-
-		GameRegistry.registerBlock(this, m);
-		Main.proxy.registerBlockTexture(this, m, modid);
-		if (oreDictionnaryName.isEmpty())
-		{
-			oreDictionnaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionnaryName(oreDictionnaryName);
-		OreDictionary.registerOre(oreDictionnaryName, this);
+		JFunction.commonInit(name, modid, this, textureModid, textureName, oreDictionnaryName);
 	}
 	
 	public JFallingBlock CanDownOnWater(boolean canDownOnWater)
@@ -103,16 +108,16 @@ public class JFallingBlock extends BlockFalling
 	
 	public String getOreDic()
 	{
-		return getOreDictionnaryName();
+		return getOreDictionaryName();
 	}
 
-	public String getOreDictionnaryName()
+	public String getOreDictionaryName()
 	{
-		return oreDictionnaryName;
+		return oreDictionaryName;
 	}
 
-	void setOreDictionnaryName(String oreDictionnaryName)
+	public void setOreDictionaryName(String oreDictionaryName)
 	{
-		this.oreDictionnaryName = oreDictionnaryName;
+		this.oreDictionaryName = oreDictionaryName;
 	}
 }

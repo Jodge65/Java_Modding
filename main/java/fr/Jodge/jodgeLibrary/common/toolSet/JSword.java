@@ -1,6 +1,7 @@
 package fr.Jodge.jodgeLibrary.common.toolSet;
 
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
 import net.minecraft.block.Block;
@@ -10,7 +11,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class JSword extends ItemSword
+public class JSword extends ItemSword implements JCommonCreate
 {
 	Item ingot;
 	boolean canBeRepair = false;
@@ -19,17 +20,7 @@ public class JSword extends ItemSword
 	public JSword(String name, Item.ToolMaterial toolData, String modid)
 	{
 		super(toolData);
-
-		String m = JFunction.convertNameToUnLocalizedName(name);
-		setUnlocalizedName(m);
-		GameRegistry.registerItem(this, m);
-		Main.proxy.registerItemTexture(this, m, modid);
-		if (this.oreDictionaryName.isEmpty())
-		{
-			this.oreDictionaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionaryName(this.oreDictionaryName);
-		OreDictionary.registerOre(this.oreDictionaryName, this);
+		JFunction.commonInit(name, modid, this, oreDictionaryName);
 	}
 
 	public JSword(String name, Item ingot, Item.ToolMaterial toolData, String modid)
@@ -53,7 +44,7 @@ public class JSword extends ItemSword
 		return this.oreDictionaryName;
 	}
 
-	void setOreDictionaryName(String oreDictionaryName)
+	public void setOreDictionaryName(String oreDictionaryName)
 	{
 		this.oreDictionaryName = oreDictionaryName;
 	}

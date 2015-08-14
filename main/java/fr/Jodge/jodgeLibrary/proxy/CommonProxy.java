@@ -1,6 +1,9 @@
 package fr.Jodge.jodgeLibrary.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 
 public class CommonProxy
@@ -9,19 +12,11 @@ public class CommonProxy
 	{
 	}
 
-	public void registerItemTexture(Item item, int metadata, String name, String modid)
+	public void registerTexture(Object obj, int metadata, String name, String modid)
 	{
 	}
 
-	public void registerItemTexture(Item item, String name, String modid)
-	{
-	}
-
-	public void registerBlockTexture(Block block, int metadata, String name, String modid)
-	{
-	}
-
-	public void registerBlockTexture(Block block, String name, String modid)
+	public void registerTexture(Object obj, String name, String modid)
 	{
 	}
 

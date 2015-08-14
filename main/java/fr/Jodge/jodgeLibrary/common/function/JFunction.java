@@ -2,7 +2,11 @@ package fr.Jodge.jodgeLibrary.common.function;
 
 import java.util.Locale;
 
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
+import fr.Jodge.jodgeLibrary.common.Main;
+import fr.Jodge.jodgeLibrary.common.block.JBlock;
 import fr.Jodge.jodgeLibrary.common.extendWeapons.JWeapons;
+import fr.Jodge.jodgeLibrary.common.item.JItem;
 
 
 import net.minecraft.block.Block;
@@ -32,10 +36,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * @author Jodge
+ * 
+ */
 public class JFunction
 {
-	public static final String getJAuthor()
+	public static final String getJAuthorMinecraftName()
 	{
 		return "Jodge65";
 	}
@@ -412,6 +421,59 @@ public class JFunction
 		JLog.write("[WARNING] The crafting schema \"" + format + "\" doens't exist");
 		return Boolean.valueOf(false);
 	}
+
+	
+	public static void commonInit(String name, String modid, JCommonCreate obj, String modidTexture, String textureName, String oreDictionnaryName)
+	{
+		String m = convertNameToUnLocalizedName(name);
+
+		if(name.equalsIgnoreCase(textureName))
+		{
+			textureName = m;
+		}
+		if (oreDictionnaryName.isEmpty())
+		{
+			oreDictionnaryName = convertNameToOreDictionaryName(name);
+		}
+		obj.setOreDictionaryName(oreDictionnaryName);
+		Main.proxy.registerTexture(obj, textureName, modidTexture);
+
+		JLog.write(modidTexture + ":" + textureName);
+		
+		if(obj instanceof Block)
+		{
+			GameRegistry.registerBlock((Block) obj, m);
+			OreDictionary.registerOre(oreDictionnaryName, (Block) obj);
+			((Block) obj).setUnlocalizedName(m);
+		}
+		else if(obj instanceof Item)
+		{
+			GameRegistry.registerItem((Item) obj, m);
+			OreDictionary.registerOre(oreDictionnaryName, (Item) obj);
+			((Item) obj).setUnlocalizedName(m);
+		}
+		else
+		{
+			JLog.write("[WARNING] The object name : " + name + " Isn't instance of autorized class.");
+		}
+	}
+	
+/*	public static void commonInit(String name, String modid, JCommonCreate obj, String modidTexture, String textureName)
+	{		
+		commonInit(name, modid, obj, modidTexture, textureName, "");
+	}*/
+	
+	public static void commonInit(String name, String modid, JCommonCreate obj, String oreDictionnaryName)
+	{		
+		commonInit(name, modid, obj, modid, name, oreDictionnaryName);
+	}
+	
+	public static void commonInit(String name, String modid, JCommonCreate obj)
+	{
+		commonInit(name, modid, obj, "");
+	}
+	
+	
 
 
 }

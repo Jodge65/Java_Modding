@@ -1,7 +1,9 @@
 package fr.Jodge.jodgeLibrary.common.block;
 
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.sound.JSound;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
@@ -9,15 +11,15 @@ import net.minecraft.block.material.Material;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-public class JBlock extends Block
+/**
+ * @author Jodge
+ * 
+ */
+public class JBlock extends Block implements JCommonCreate
 {
-	public static final Block fire = new JFireBlock();
 
-	private String oreDictionnaryName;
+	public String oreDictionaryName;
 	
-	public static final Block.SoundType soundTypeCloud = new Block.SoundType("stone", 0.1F, 0.3F);
-
 	public JBlock(Material material, String name, String modid)
 	{
 		this(material, name, modid, "");
@@ -25,9 +27,18 @@ public class JBlock extends Block
 
 	public JBlock(Material material, String name, String modid, String oreDictionnaryName)
 	{
+		this(material, name, modid, modid, name, oreDictionnaryName);
+	}
+	
+	public JBlock(Material material, String name, String modid, String textureModid, String textureName)
+	{
+		this(material, name, modid, textureModid, textureName, "");
+	}
+	
+	public JBlock(Material material, String name, String modid, String textureModid, String textureName, String oreDictionnaryName)
+	{
 		super(material);
-		String m = JFunction.convertNameToUnLocalizedName(name);
-		setUnlocalizedName(m);
+
 		if (material == JMaterial.ore)
 		{
 			isOre();
@@ -36,14 +47,8 @@ public class JBlock extends Block
 		{
 			isCloud();
 		}
-		GameRegistry.registerBlock(this, m);
-		Main.proxy.registerBlockTexture(this, m, modid);
-		if (oreDictionnaryName.isEmpty())
-		{
-			oreDictionnaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionnaryName(oreDictionnaryName);
-		OreDictionary.registerOre(oreDictionnaryName, this);
+		
+		JFunction.commonInit(name, modid, this, textureModid, textureName, oreDictionnaryName);
 	}
 
 	public Block isOre()
@@ -58,22 +63,24 @@ public class JBlock extends Block
 	{
 		setHardness(0.0F);
 		setResistance(0.0F);
-		setStepSound(soundTypeCloud);
+		setStepSound(JSound.soundTypeCloud);
 		return this;
 	}
 
 	public String getOreDic()
 	{
-		return getOreDictionnaryName();
+		return getOreDictionaryName();
 	}
 
-	public String getOreDictionnaryName()
+	public void setOreDictionaryName(String oreDictionnaryName)
 	{
-		return this.oreDictionnaryName;
+		this.oreDictionaryName = oreDictionnaryName;
 	}
 
-	void setOreDictionnaryName(String oreDictionnaryName)
+	public String getOreDictionaryName()
 	{
-		this.oreDictionnaryName = oreDictionnaryName;
+		return this.oreDictionaryName;
 	}
+
+
 }

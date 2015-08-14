@@ -1,5 +1,6 @@
 package fr.Jodge.jodgeLibrary.proxy;
 
+import fr.Jodge.jodgeLibrary.common.function.JLog;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
@@ -14,27 +15,26 @@ public class ClientProxy extends CommonProxy
 	{
 	}
 
-	public void registerItemTexture(Item item, int metadata, String name, String modid)
+	public void registerTexture(Object obj, int metadata, String name, String modid)
 	{
+		Item objectRender;
+		if(obj instanceof Block)
+		{
+			objectRender = Item.getItemFromBlock((Block)obj);
+		}
+		else
+		{
+			objectRender = (Item) obj;
+		}
+			
 		ItemModelMesher mesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
-		mesher.register(item, metadata, new ModelResourceLocation(modid + ":" + name, "inventory"));
+		mesher.register(objectRender, metadata, new ModelResourceLocation(modid + ":" + name, "inventory"));
 	}
-
-	public void registerItemTexture(Item item, String name, String modid)
+	public void registerTexture(Object obj, String name, String modid)
 	{
-		registerItemTexture(item, 0, name, modid);
+		registerTexture(obj, 0, name, modid);
 	}
-
-	public void registerBlockTexture(Block block, int metadata, String name, String modid)
-	{
-		registerItemTexture(Item.getItemFromBlock(block), metadata, name, modid);
-	}
-
-	public void registerBlockTexture(Block block, String name, String modid)
-	{
-		registerBlockTexture(block, 0, name, modid);
-	}
-
+	
 	public void multiTexture(Item item, String[] chaine)
 	{
 		ModelBakery.addVariantName(item, chaine);

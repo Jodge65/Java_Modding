@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JDamageHelper;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
@@ -29,11 +30,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class JWeapons extends ItemSword
+public class JWeapons extends ItemSword implements JCommonCreate
 {
 	protected Item ingot;
 	protected boolean canBeRepair = false;
-	protected String oreDictionaryName = "";
+	
+	public String oreDictionaryName = "";
+	
 	protected float attackDamage;
 	protected final Item.ToolMaterial material;
 	protected String modid;
@@ -42,7 +45,7 @@ public class JWeapons extends ItemSword
 	public boolean multiCombo = false;
 	public int timer = 0;
 	public int comboTimer;
-
+	
 	public static final int clicSpeed = 10;
 	
 	public JWeapons(String name, Item.ToolMaterial toolData, String modid)
@@ -57,16 +60,9 @@ public class JWeapons extends ItemSword
 		setMaxDamage(this.material.getMaxUses());
 		setCreativeTab(CreativeTabs.tabCombat);
 		this.attackDamage = this.material.getDamageVsEntity();
-		String m = JFunction.convertNameToUnLocalizedName(name);
-		setUnlocalizedName(m);
-		GameRegistry.registerItem(this, m);
-		Main.proxy.registerItemTexture(this, getUnlocalizedNameAlone(), modid);
-		if (this.oreDictionaryName.isEmpty())
-		{
-			this.oreDictionaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionaryName(this.oreDictionaryName);
-		OreDictionary.registerOre(this.oreDictionaryName, this);
+		
+		JFunction.commonInit(name, modid, this);
+				
 	}
 
 	public JWeapons(String name, Item ingot, Item.ToolMaterial toolData, String modid)
@@ -177,16 +173,6 @@ public class JWeapons extends ItemSword
 		return this.ingot;
 	}
 
-	public String getOreDic()
-	{
-		return getOreDictionaryName();
-	}
-
-	public String getOreDictionaryName()
-	{
-		return this.oreDictionaryName;
-	}
-
 	public float getHitDamage()
 	{
 		return this.attackDamage;
@@ -202,11 +188,6 @@ public class JWeapons extends ItemSword
 		return getUnlocalizedName().substring(5);
 	}
 
-	void setOreDictionaryName(String oreDictionaryName)
-	{
-		this.oreDictionaryName = oreDictionaryName;
-	}
-
 	public void setBonusDamage(float bonusDamage)
 	{
 		this.attackDamage = (bonusDamage + this.material.getDamageVsEntity());
@@ -215,5 +196,20 @@ public class JWeapons extends ItemSword
 	public boolean destructibleBlock(Block block, BlockPos pos, World worldIn, EntityPlayer player)
 	{
 		return false;
+	}
+	
+	public String getOreDic()
+	{
+		return getOreDictionaryName();
+	}
+	
+	public void setOreDictionaryName(String oreDictionnaryName)
+	{
+		this.oreDictionaryName = oreDictionnaryName;
+	}
+	
+	public String getOreDictionaryName()
+	{
+		return this.oreDictionaryName;
 	}
 }

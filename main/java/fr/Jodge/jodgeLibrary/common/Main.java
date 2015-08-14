@@ -17,7 +17,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.relauncher.Side;
-
+/**
+ * @author Jodge
+ * 
+ */
 @Mod(modid = "jodgelibrary", name = "Jodge Library", version = "A0.1.0", acceptedMinecraftVersions = "[1.8]")
 public class Main
 {
@@ -27,6 +30,8 @@ public class Main
 	
 	public static final boolean DEBUG = true;
 	
+	public static Block fire;
+
 	@Mod.Instance("jodgelibrary")
 	public static Main instance;
 	
@@ -50,7 +55,7 @@ public class Main
 		{
 			
 		}
-		
+		fire = new JFireBlock();
 
 	}
 

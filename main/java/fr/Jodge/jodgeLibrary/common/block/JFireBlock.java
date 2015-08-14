@@ -26,23 +26,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
+/**
+ * @author Jodge
+ * 
+ */
 public class JFireBlock extends JFallingBlock
 {
-
-	private String oreDictionnaryName;
-
 	private final Map encouragements = Maps.newIdentityHashMap();
 	private final Map flammabilities = Maps.newIdentityHashMap();
 
 	public JFireBlock()
 	{
-		super(Material.fire, "Fire", "minecraft", "fire");
+		super(Material.fire, "JFire", Main.MODID, "minecraft", "fire", "fire");
 		CanDownOnWater(false);
 	}
 
 	public int tickRate(World worldIn)
 	{
-		return 30;
+		return 2;
 	}
 
 	// -- FALLING --- //

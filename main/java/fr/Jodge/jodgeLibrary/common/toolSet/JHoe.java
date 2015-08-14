@@ -1,6 +1,7 @@
 package fr.Jodge.jodgeLibrary.common.toolSet;
 
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -10,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class JHoe extends ItemHoe
+public class JHoe extends ItemHoe implements JCommonCreate
 {
 	Item ingot;
 	boolean canBeRepair = false;
@@ -19,17 +20,7 @@ public class JHoe extends ItemHoe
 	public JHoe(String name, Item.ToolMaterial toolData, String modid)
 	{
 		super(toolData);
-
-		String m = JFunction.convertNameToUnLocalizedName(name);
-		setUnlocalizedName(m);
-		GameRegistry.registerItem(this, m);
-		Main.proxy.registerItemTexture(this, m, modid);
-		if (this.oreDictionaryName.isEmpty())
-		{
-			this.oreDictionaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionaryName(this.oreDictionaryName);
-		OreDictionary.registerOre(this.oreDictionaryName, this);
+		JFunction.commonInit(name, modid, this, oreDictionaryName);
 	}
 
 	public JHoe(String name, Item ingot, Item.ToolMaterial toolData, String modid)
@@ -62,7 +53,7 @@ public class JHoe extends ItemHoe
 		return this.oreDictionaryName;
 	}
 
-	void setOreDictionaryName(String oreDictionaryName)
+	public void setOreDictionaryName(String oreDictionaryName)
 	{
 		this.oreDictionaryName = oreDictionaryName;
 	}

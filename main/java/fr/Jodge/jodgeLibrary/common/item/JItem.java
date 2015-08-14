@@ -1,42 +1,40 @@
 package fr.Jodge.jodgeLibrary.common.item;
 
+import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class JItem extends Item
+public class JItem extends Item implements JCommonCreate
 {
+
+	
 	private String oreDictionaryName = "";
 
-	protected Item createItem(String modid, String name)
+	public JItem(String name, String modid)
 	{
-		return createItem(modid, name, "");
+		this(name, modid, "");
 	}
 
-	protected Item createItem(String modid, String name, String oreDictionnaryName)
+	public JItem(String name, String modid, String oreDictionnaryName)
 	{
-		String m = JFunction.convertNameToUnLocalizedName(name);
-
-		setUnlocalizedName(m);
-
-		GameRegistry.registerItem(this, m);
-		Main.proxy.registerItemTexture(this, m, modid);
-		if (oreDictionnaryName.isEmpty())
-		{
-			oreDictionnaryName = JFunction.convertNameToOreDictionaryName(name);
-		}
-		setOreDictionnaryName(oreDictionnaryName);
-		OreDictionary.registerOre(oreDictionnaryName, this);
-		return this;
+		this(name, modid, modid, name, oreDictionnaryName);
 	}
-
-	public Item createIngot(String name, String modid)
+	
+	public JItem(String name, String modid, String textureModid, String textureName)
 	{
-		return createItem(name, modid);
+		this(name, modid, textureModid, textureName, "");
+	}
+	
+	public JItem(String name, String modid, String textureModid, String textureName, String oreDictionnaryName)
+	{
+		super();
+		JFunction.commonInit(name, modid, this, textureModid, textureName, oreDictionnaryName);
 	}
 
 	public String getOreDic()
@@ -49,8 +47,10 @@ public class JItem extends Item
 		return this.oreDictionaryName;
 	}
 
-	void setOreDictionnaryName(String oreDictionnaryName)
+	public void setOreDictionaryName(String oreDictionaryName)
 	{
-		this.oreDictionaryName = oreDictionnaryName;
+		this.oreDictionaryName = oreDictionaryName;
 	}
+
+
 }
