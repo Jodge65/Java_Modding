@@ -85,7 +85,7 @@ public class JFireBlock extends JFallingBlock
 			this.checkFallable(worldIn, pos);
 			if(!canFallIntoBlock(worldIn, pos.down()))
 			{
-				worldIn.setBlockToAir(pos);
+				onEndFalling(worldIn, pos);
 			}
 		}
 	}

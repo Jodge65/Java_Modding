@@ -38,6 +38,8 @@ public class JBlock extends Block implements JCommonCreate
 	public JBlock(Material material, String name, String modid, String textureModid, String textureName, String oreDictionnaryName)
 	{
 		super(material);
+		
+		JFunction.commonInit(name, modid, this, textureModid, textureName, oreDictionnaryName);
 
 		if (material == JMaterial.ore)
 		{
@@ -48,7 +50,6 @@ public class JBlock extends Block implements JCommonCreate
 			isCloud();
 		}
 		
-		JFunction.commonInit(name, modid, this, textureModid, textureName, oreDictionnaryName);
 	}
 
 	public Block isOre()

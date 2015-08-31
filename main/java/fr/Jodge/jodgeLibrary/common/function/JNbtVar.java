@@ -23,25 +23,26 @@ public enum JNbtVar
 		return name;
 	}
 
-	private static boolean write(ItemStack stack, String varName, Object value)
+	private static boolean write(ItemStack stack, String varName, Number value)
 	{
+		Float test;
 		boolean isWrite = false;
 		
 		if(value instanceof Integer)
 		{
-			stack.getTagCompound().setInteger(varName, (int) value);
+			stack.getTagCompound().setInteger(varName, value.intValue());
 			isWrite = true;
 		}
 		else if (value instanceof Double)
 		{
-			stack.getTagCompound().setDouble(varName, (double) value);
+			stack.getTagCompound().setDouble(varName, value.doubleValue());
 			isWrite = true;
 		}
 		
 		return isWrite;
 	}
 	
-	public static boolean writeNbtVar(ItemStack stack, JNbtVar var, Object value)
+	public static boolean writeNbtVar(ItemStack stack, JNbtVar var, Number value)
 	{
 		boolean isWrite = false;
 		if (stack.hasTagCompound())

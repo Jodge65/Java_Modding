@@ -45,7 +45,7 @@ public class Main
 		Item.ToolMaterial copperTool = EnumHelper.addToolMaterial("COPPER", 2, 100, 6.0F, 2.0F, 14);
 
 		proxy.registerRender();
-		Block copperOre = new JBlock(JMaterial.cloud, "Copper ore", "universalores").setCreativeTab(CreativeTabs.tabBlock);
+		Block copperOre = new JBlock(JMaterial.ore, "Copper ore", "universalores").setCreativeTab(CreativeTabs.tabBlock);
 		Item copperIngot = new JItem("Copper Ingot", "universalores").setCreativeTab(CreativeTabs.tabBlock);
 		Item copperSword = new JSword("Copper sword", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
 		Item copperPickaxe = new JPickaxe("Copper pickaxe", copperIngot, copperTool, "universalores").activeAutoCraftingRecipe();
