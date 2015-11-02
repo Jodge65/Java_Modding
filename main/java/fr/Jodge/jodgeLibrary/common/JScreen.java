@@ -30,34 +30,41 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class JScreen extends Gui
 {
 
-	private static int WIDTH = 16;
-	private static int HEIGHT = 16;
-	private static int NBSLOT = 9;
+	/** Width of the texture use */
+	protected static int WIDTH = 16;
+	/** Height of the texture use */
+	protected static int HEIGHT = 16;
+	/** Number of slot available on screen */
+	protected static int NBSLOT = 9;
 	
-	private static float BLUE_BAR = 1.0F;
-	private static float RED_BAR = 1.0F;
-	private static float YELLOW_BAR = 1.0F;
+	
+	protected static float BLUE_BAR = 1.0F;
+	protected static float RED_BAR = 1.0F;
+	protected static float YELLOW_BAR = 1.0F;
 
-	private static EntityPlayer player;
-
-	private static Minecraft MC = Minecraft.getMinecraft();;
-
+	/** reference to the player */
+	protected static EntityPlayer player;
+	/** reference to the minecraft class */
+	protected static Minecraft MC = Minecraft.getMinecraft();;
+	/** reference to the texture*/
 	ResourceLocation TIMERTEXTURE = new ResourceLocation(Main.MODID + ":textures/gui/timerCombo.png");
 
-	
+	/**
+	 * render Timer
+	 */
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void onRenderTimer(RenderGameOverlayEvent.Post event)
 	{
 		if (event.isCancelable() || event.type != ElementType.HOTBAR)
-		{
+		{ 
 			return;
 		}
 
 		// VARIABLE
 		if (player == null || player != MC.thePlayer)
-		{
-			player = MC.thePlayer; // To get Player
+		{ // if the player can change
+			player = MC.thePlayer; 
 		}
 
 		int limMax = player.openContainer.getInventory().size(); // maximum size of inventory		
@@ -146,10 +153,16 @@ public class JScreen extends Gui
 	} // RenderGameOverlayEvent(post)
 
 	
+	/**
+	 * 
+	 * @param slot (int) slot to check
+	 * @param nbSlot (int) number of slot (hotbarSlot = nbSlot - slot)
+	 * @return (int) number of pixel to adapt. 0 if slot not available.
+	 */
 	int getXforSlot(int slot, int nbSlot)
 	{
 		ScaledResolution sr = new ScaledResolution(MC, MC.displayWidth, MC.displayHeight);
-		;
+
 		int x = (sr.getScaledWidth() / 2) - WIDTH / 2;
 		int pos = nbSlot - slot;
 

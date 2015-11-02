@@ -10,10 +10,18 @@ import java.util.List;
 
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JLog;
-
+/**
+ * 
+ * @author Jodge
+ *
+ */
 public class JSchema
 {
-	
+	/**
+	 * adapt a line of int into a line of boolean
+	 * @param value (int...) line of int to onvert into boolean. 0 = false, ALL other = 1
+	 * @return (List<Boolean>)
+	 */
 	public static List<Boolean> line(int... value)
 	{
 		List<Boolean> line = new ArrayList<Boolean>();
@@ -21,18 +29,19 @@ public class JSchema
 		for (int i : value)
 		{
 			if (i == 0)
-			{
 				line.add(false);
-			}
 			else
-			{
 				line.add(true);
-			}
 		}
 
 		return line;
 	}
 
+	/**
+	 * return a full tab of false (2 dimensions)
+	 * @param size (int) size of grid
+	 * @return (List<List<Boolean>>)
+	 */
 	public static List<List<Boolean>> emptyTab(int size)
 	{
 		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean
@@ -47,6 +56,13 @@ public class JSchema
 		return areaBool;
 	}
 	
+	/**
+	 * return the same form, but in a bigger grid. (add a lot of false !)
+	 * @param grid (List<List<Boolean>>) grid to adapt
+	 * @param newSize (int) new size (size needed)
+	 * @param oldSize (int) actual size of grid (often = max size of form)
+	 * @return (List<List<Boolean>>)
+	 */
 	public static List<List<Boolean>> adaptOnGrid(List<List<Boolean>> grid, int newSize, int oldSize)
 	{
 		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean

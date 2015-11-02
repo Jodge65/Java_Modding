@@ -5,50 +5,77 @@ import java.util.List;
 
 import fr.Jodge.jodgeLibrary.common.function.JLog;
 
+/**
+ * 
+ * @author Jodge
+ *
+ */
 public class JDome extends JSchema
 {
+	/** dome List<List<List<Boolean>>> (3dimensions, Yeay !) */
 	public List<List<List<Boolean>>> dome;
+	/** Rayon of the dome */
 	public int rayon;
 
+	/**
+	 * basic constructo
+	 * @param rayon (int) ran of dome
+	 * @param gridSize (int) grid where adapt the doom (for complex adaptive structure, have a same grid can be helpful)
+	 */
 	public JDome(int rayon)
 	{
 		this(rayon, rayon * 2 + 1);
 	}
 	public JDome(int rayon, int gridSize)
 	{
-		this(rayon, gridSize, false);
-	}	
-	public JDome(int rayon, int gridSize, boolean forceGenerate)
-	{
-		dome = createDome(rayon, gridSize, forceGenerate);
+		dome = createDome(rayon, gridSize);
 		this.rayon = rayon;
 	}
 
+	/**
+	 * set the JDome as an extrude dome
+	 * @param wallLenght (int - optional) number of block for the "wall". If empty = 1
+	 * @return (JDome)
+	 */
 	public JDome setExtrudeDome()
 	{
 		return setExtrudeDome(1);
 	}
-	
 	public JDome setExtrudeDome(int wallLenght)
 	{
 		dome = extrudeDome(dome, rayon, wallLenght);;
 		return this;
 	}
 	
+	/**
+	 * return the tab of boolean of the dome generate
+	 * @return (List<List<List<Boolean>>>) 
+	 */
 	public List<List<List<Boolean>>> getDome()
 	{
 		return dome;
 	}
+	
+	/**
+	 * return the rayon of circle
+	 * @return (in)
+	 */
 	public int getRayon()
 	{
 		return rayon;
 	}
 	
+	/**
+	 * 
+	 * @param domeReceive (List<List<List<Boolean>>>) dome to use (/!\ not a JDom var !!!)
+	 * @param rayon (int) ran of dome (it's a static methode)
+	 * @param wallLenght (int - optional) number of block for the "wall". If empty = 1
+	 * @return (List<List<List<Boolean>>>)
+	 */
 	public static List<List<List<Boolean>>> extrudeDome(List<List<List<Boolean>>> domeReceive, int rayon)
 	{
 		return extrudeDome(domeReceive, rayon, 1);
 	}
-	
 	public static List<List<List<Boolean>>> extrudeDome(List<List<List<Boolean>>> domeReceive, int rayon, int wallLenght)
 	{
 		List<List<List<Boolean>>> intDome = createDome( (rayon - wallLenght) , rayon*2+1);
@@ -76,7 +103,7 @@ public class JDome extends JSchema
 					eDV = intDome.get(y).get(x).get(z);
 					finalDome.get(y).get(x).add(!(dV == eDV) );
 					
-					JLog.write("#BOOL# x=" + x + ", z=" + z + ", y=" + y + "dV : " + dV + ", eDV : " + eDV + ", !(dV == eDV) : " + !(dV == eDV) + ", finaly : " + domeReceive.get(y).get(x).get(z));
+					//JLog.write("#BOOL# x=" + x + ", z=" + z + ", y=" + y + "dV : " + dV + ", eDV : " + eDV + ", !(dV == eDV) : " + !(dV == eDV) + ", finaly : " + domeReceive.get(y).get(x).get(z));
 
 				}
 			}
@@ -85,22 +112,20 @@ public class JDome extends JSchema
 		return finalDome;
 	}
 	
+	/**
+	 * 
+	 * @param rayon (int) Rayon of Dome (full dome)
+	 * @param grid (int - optional) size of the grid (if empty size : rayon*2+1, height : rayon*2). Use to adapt all your object on same grid
+	 * @return (List<List<List<Boolean>>>)
+	 */
 	public static List<List<List<Boolean>>> createDome(int rayon)
 	{
 		return createDome(rayon, ((rayon*2)+1));
 	}
 	public static List<List<List<Boolean>>> createDome(int rayon, int grid)
 	{
-		return createDome(rayon, grid, false);
-	}
-	public static List<List<List<Boolean>>> createDome(int rayon, int grid , boolean forceGenerate)
-	{
 
 		List<List<List<Boolean>>> areaBool = new ArrayList<List<List<Boolean>>>(); // Tab of boolean
-		if(rayon > JCircle.LIMITE_RAYON_CIRCLE_GENERATE && !forceGenerate)
-		{
-			forceGenerate = true;
-		}
 
 		int heigth = (grid - 1) / 2 + 1;
 		int domeSize = rayon * 2 + 1;
@@ -112,7 +137,8 @@ public class JDome extends JSchema
 		int actualRayon;
 		int oldRayon = -1;
 		List<List<Boolean>> domeFace = new ArrayList<List<Boolean>>();
-		domeFace.addAll(JCircle.createCircle(rayon, grid));
+		JCircle myCircle = new JCircle(rayon, grid);
+		domeFace.addAll(myCircle.getCircle());
 		
 		List<List<Boolean>> domeStep = new ArrayList<List<Boolean>>();
 
@@ -135,7 +161,7 @@ public class JDome extends JSchema
 				actualRayon /= 2;
 				if(oldRayon != actualRayon)
 				{
-					domeStep = JCircle.createCircle(actualRayon, grid, forceGenerate);
+					domeStep = JCircle.createCircle(actualRayon, grid);
 				}
 			}
 			else

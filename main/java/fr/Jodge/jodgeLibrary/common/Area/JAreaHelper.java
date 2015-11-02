@@ -15,6 +15,15 @@ import net.minecraft.util.Vec3;
 
 public class JAreaHelper
 {
+	/**
+	 *  * an entity can be put instead of this 2. In this case Height can't be give : it will be adapt if entity is sneaking or not.
+	 * @param pos1 (BlockPos or 3 double) *
+	 * @param pos2 (BlockPos or 3 double) *
+	 * 
+	 * @param rayon (double) ran of circle
+	 * @param height (double - optional) height of circle. If empty : 1.0D (one block)
+	 * @return(AxisAlignedBB) minecraftArea (cirle)
+	 */
 	public static AxisAlignedBB circleArea(double x1, double y1, double z1, double x2, double y2, double z2, double rayon, double height)
 	{
 		return new AxisAlignedBB(x1, y1 + height, z1, x2 + 1.0D, y2 + height + 1.0D, z2 + 1.0D).expand(rayon, 0.0D, rayon);
@@ -55,7 +64,13 @@ public class JAreaHelper
 			return circleArea(entity.posX, entity.posY, entity.posZ, entity.posX, entity.posY, entity.posZ, rayon);
 	}
 
-	
+	/**
+	 * 
+	 * @param pos1 (BlockPos or 3 double) 
+	 * @param pos2 (BlockPos or 3 double) 
+	 * @param height (double - optional) height of circle. If empty : 1.0D (one block)
+	 * @return(AxisAlignedBB) minecraftArea (square)
+	 */
 	public static AxisAlignedBB squareArea(double x1, double y1, double z1, double x2, double y2, double z2, double height)
 	{
 		return new AxisAlignedBB(x1, y1 + height, z1, x2 + 1.0D, y2 + height + 1.0D, z2 + 1.0D);
@@ -73,7 +88,12 @@ public class JAreaHelper
 		return squareArea(x1, y1, z1, x2, y2, z2, 1.0D);
 	}
 	
-	
+	/**
+	 * 
+	 * @param player (EntityPlayer) player which use the function
+	 * @param hitArea (AxisAligneBB) area of effect
+	 * @return (List) all entity in area
+	 */
 	public static List getEntityInArea(EntityPlayer player, AxisAlignedBB hitArea)
 	{
 		return player.worldObj.getEntitiesWithinAABBExcludingEntity(player, hitArea);
@@ -83,6 +103,12 @@ public class JAreaHelper
 		return player.worldObj.getEntitiesWithinAABBExcludingEntity(player, circleArea(player, range));
 	}	
 	
+	/**
+	 * add the sub function, which is not available on basic function....
+	 * @param vector (Vec3)
+	 * @param multiplier (double)
+	 * @return Vec3)
+	 */
     public static Vec3 subVector(Vec3 vector, double multiplier)
     {
     	while(multiplier > 1.0D)
@@ -97,6 +123,7 @@ public class JAreaHelper
         return vector;
     }
 	
+    
 	public static List getEntitySquareArea(EntityPlayer player, double range)
 	{
         ArrayList listToFill = Lists.newArrayList();

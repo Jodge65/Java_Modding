@@ -44,11 +44,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class JScythe extends JWeapons
 {
-	// private static final long start = System.currentTimeMillis() / 1000;
-	// private static int seconds = 0;
+	// protected static final long start = System.currentTimeMillis() / 1000;
+	// protected static int seconds = 0;
 
 	public int fireColumn;
-	private int rayonArea;
+	protected int rayonArea;
 
 	public JScythe(String name, Item ingot, Item.ToolMaterial toolData, String modid)
 	{
@@ -198,17 +198,17 @@ public class JScythe extends JWeapons
 		return true;
 	}
 
-	private void leftHit1(ItemStack stack, EntityPlayer player, Entity entity)
+	protected void leftHit1(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		JDamageHelper.dealDamage(player, entity);
 	}
 
-	private void leftHit2(ItemStack stack, EntityPlayer player, Entity entity)
+	protected void leftHit2(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		JDamageHelper.dealMultipleDamage(player, JAreaHelper.getEntitySquareArea(player, 3), 0.75F);
 	}
 
-	private void leftHit3(ItemStack stack, EntityPlayer player, Entity entity)
+	protected void leftHit3(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		if (player.isSneaking())
 		{
@@ -255,7 +255,7 @@ public class JScythe extends JWeapons
 		}
 	}
 
-	private void rightHitCharge(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
+	protected void rightHitCharge(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
 	{
 		int x = stack.getMaxItemUseDuration() - timeLeft;
 		if (x > 40)
@@ -274,7 +274,7 @@ public class JScythe extends JWeapons
 		JDamageHelper.dealMultipleDamage(player, JAreaHelper.getEntityInArea(player, bonus), damageMultiplier, false);
 	}
 
-	private void rightHit1(ItemStack stack, World world, EntityPlayer player, int timeLeft)
+	protected void rightHit1(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 	{
 		int xMin = Math.round(player.getPosition().getX() - rayonArea);
 		int xMax = Math.round(player.getPosition().getX() + rayonArea);
@@ -322,7 +322,7 @@ public class JScythe extends JWeapons
 
 	}
 
-	private void rightHit2(ItemStack stack, World world, EntityPlayer player, int timeLeft)
+	protected void rightHit2(ItemStack stack, World world, EntityPlayer player, int timeLeft)
 	{
 		int xMin = Math.round(player.getPosition().getX() - rayonArea);
 		int xMax = Math.round(player.getPosition().getX() + rayonArea);
@@ -332,7 +332,7 @@ public class JScythe extends JWeapons
 		int yMin = Math.round(player.getPosition().getY());
 
 		List<List<Boolean>> areaBool = new ArrayList<List<Boolean>>(); // Tab of boolean
-		areaBool = JCircle.createCircle(rayonArea);
+		areaBool = JCircle.getCircle(rayonArea);
 
 		for (int i = 0; i < rayonArea * 2 + 1; i++)
 		{
@@ -369,7 +369,7 @@ public class JScythe extends JWeapons
 
 	}
 
-	private void rightHit3(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
+	protected void rightHit3(ItemStack stack, World worldIn, EntityPlayer player, int timeLeft)
 	{
 		List entity = JAreaHelper.getEntityInArea(player, 2);
 
