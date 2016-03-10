@@ -1,5 +1,6 @@
 package fr.Jodge.jodgeLibrary.common;
 
+
 /**
  * 
  * @author Jodge
@@ -18,4 +19,5 @@ public interface JCommonCreate
 	 * @return (string)
 	 */
 	public String getOreDictionaryName();
+	
 }

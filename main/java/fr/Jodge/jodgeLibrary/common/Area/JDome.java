@@ -14,11 +14,11 @@ public class JDome extends JSchema
 {
 	/** dome List<List<List<Boolean>>> (3dimensions, Yeay !) */
 	public List<List<List<Boolean>>> dome;
-	/** Rayon of the dome */
+	/** Ran of dome */
 	public int rayon;
 
 	/**
-	 * basic constructo
+	 * basic constructor
 	 * @param rayon (int) ran of dome
 	 * @param gridSize (int) grid where adapt the doom (for complex adaptive structure, have a same grid can be helpful)
 	 */

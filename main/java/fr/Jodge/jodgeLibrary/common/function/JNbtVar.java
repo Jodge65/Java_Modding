@@ -9,8 +9,12 @@ public enum JNbtVar
 	RightPreviousCombo("rPC"), 
 	LeftCombo("lC"), 
 	LeftPreviousCombo("lPC"), 
-	StartCombo("sC");
-		
+	StartCombo("sC"),
+	ToolMaterial_head("tM_4"),
+	ToolMaterial_cross("tM_3"),
+	ToolMaterial_stick("tM_2"),
+	ToolMaterial_main("tM_1");
+
 	private String name = "";
 
 	JNbtVar(String name)

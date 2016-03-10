@@ -70,7 +70,7 @@ public class JSchema
 		if (oldSize > newSize)
 		{
 			areaBool = grid;
-			JLog.write("[WARNING] The tab doens't need to be adapte. Actual size : " + oldSize + ", New Size : " + newSize + ".");
+			JLog.warning("The tab doens't need to be adapte. Actual size : " + oldSize + ", New Size : " + newSize + ".");
 		}
 		else if (oldSize == newSize)
 		{
@@ -82,7 +82,7 @@ public class JSchema
 			if (numberOfAdd % 2 != 0)
 			{
 				numberOfAdd++;
-				JLog.write("[WARNING] You try to adapt a " + oldSize + "x" + oldSize + "grid to a " + newSize + "x" + newSize + " the form will be no longue center !");
+				JLog.warning("You try to adapt a " + oldSize + "x" + oldSize + "grid to a " + newSize + "x" + newSize + " the form will be no longue center !");
 			}
 			numberOfAdd /= 2;
 

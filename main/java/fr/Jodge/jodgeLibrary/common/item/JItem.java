@@ -3,6 +3,7 @@ package fr.Jodge.jodgeLibrary.common.item;
 import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.toolSet.JSword;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -13,7 +14,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public class JItem extends Item implements JCommonCreate
 {
 
-	
 	private String oreDictionaryName = "";
 
 	public JItem(String name, String modid)
@@ -52,5 +52,14 @@ public class JItem extends Item implements JCommonCreate
 		this.oreDictionaryName = oreDictionaryName;
 	}
 
+	public JItem activeAutoCraftingRecipe(Item ingot)
+	{
+		return activeAutoCraftingRecipe("Block", ingot);
+	}
 
+	public JItem activeAutoCraftingRecipe(String schemaType, Item ingot)
+	{
+		JFunction.addBasicRecipe(this, ingot, schemaType);
+		return this;
+	}
 }

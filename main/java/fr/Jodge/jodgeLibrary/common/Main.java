@@ -4,6 +4,7 @@ import fr.Jodge.jodgeLibrary.common.Area.JSchema;
 import fr.Jodge.jodgeLibrary.common.block.JBlock;
 import fr.Jodge.jodgeLibrary.common.block.JFireBlock;
 import fr.Jodge.jodgeLibrary.common.block.JMaterial;
+import fr.Jodge.jodgeLibrary.common.function.JToolMaterial;
 import fr.Jodge.jodgeLibrary.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -38,9 +39,11 @@ public class Main
 	@SidedProxy(clientSide = "fr.Jodge.jodgeLibrary.proxy.ClientProxy", serverSide = "fr.Jodge.jodgeLibrary.proxy.CommonProxy")
 	public static CommonProxy proxy;
 
+	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		JToolMaterial.initialize();
 	}
 
 	@Mod.EventHandler

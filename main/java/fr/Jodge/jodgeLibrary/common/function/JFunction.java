@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -333,10 +334,13 @@ public class JFunction
 		{
 			oreDictionary = convertNameToUnLocalizedName(name);
 		}
-		JLog.write("[WARNING] The Block \"" + name + "\" doens't have an oreDictionnary name. \"" + oreDictionary + "\" was generate.");
+		JLog.warning("The Block \"" + name + "\" doens't have an oreDictionnary name. \"" + oreDictionary + "\" was generate.");
 		return oreDictionary;
 	}
-
+	public static Boolean addBasicRecipe(Block finalItem, Item ingot, String format)
+	{
+		return addBasicRecipe(Item.getItemFromBlock(finalItem), ingot, format);
+	}
 	public static Boolean addBasicRecipe(Item finalItem, Item ingot, String format)
 	{
 		String ligne1 = "   ";
@@ -402,6 +406,31 @@ public class JFunction
 			ligne2 = "I I";
 			ligne3 = "I I";
 		}
+		else if (format.equalsIgnoreCase("block"))
+		{
+			ligne1 = "III";
+			ligne2 = "III";
+			ligne3 = "III";
+		}
+		else if (format.equalsIgnoreCase("littleblock"))
+		{
+			ligne1 = "II ";
+			ligne2 = "II ";
+			ligne3 = "   ";
+		}
+		else if (format.equalsIgnoreCase("stair"))
+		{
+			ligne1 = "  I";
+			ligne2 = " II";
+			ligne3 = "III";
+		}
+		else if (format.equalsIgnoreCase("slab"))
+		{
+			ligne1 = "   ";
+			ligne2 = "   ";
+			ligne3 = "III";
+		}
+		
 		if ((ligne1 != "   ") || (ligne2 != "   ") || (ligne3 != "   "))
 		{
 			if (ligne1 == "   ")
@@ -418,7 +447,7 @@ public class JFunction
 			}
 			return Boolean.valueOf(true);
 		}
-		JLog.write("[WARNING] The crafting schema \"" + format + "\" doens't exist");
+		JLog.warning("The crafting schema \"" + format + "\" doens't exist");
 		return Boolean.valueOf(false);
 	}
 
@@ -454,7 +483,7 @@ public class JFunction
 		}
 		else
 		{
-			JLog.write("[WARNING] The object name : " + name + " Isn't instance of autorized class.");
+			JLog.write("[WARNING] The object name : " + name + " isn't instance of autorized class.");
 		}
 	}
 	
@@ -473,7 +502,7 @@ public class JFunction
 		commonInit(name, modid, obj, "");
 	}
 	
-	
+
 
 
 }

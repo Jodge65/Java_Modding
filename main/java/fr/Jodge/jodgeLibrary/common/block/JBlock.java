@@ -3,11 +3,13 @@ package fr.Jodge.jodgeLibrary.common.block;
 import fr.Jodge.jodgeLibrary.common.JCommonCreate;
 import fr.Jodge.jodgeLibrary.common.Main;
 import fr.Jodge.jodgeLibrary.common.function.JFunction;
+import fr.Jodge.jodgeLibrary.common.item.JItem;
 import fr.Jodge.jodgeLibrary.common.sound.JSound;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -52,7 +54,7 @@ public class JBlock extends Block implements JCommonCreate
 		
 	}
 
-	public Block isOre()
+	public JBlock isOre()
 	{
 		setHardness(0.3F);
 		setResistance(0.5F);
@@ -60,7 +62,7 @@ public class JBlock extends Block implements JCommonCreate
 		return this;
 	}
 
-	public Block isCloud()
+	public JBlock isCloud()
 	{
 		setHardness(0.0F);
 		setResistance(0.0F);
@@ -83,5 +85,14 @@ public class JBlock extends Block implements JCommonCreate
 		return this.oreDictionaryName;
 	}
 
+	public JBlock activeAutoCraftingRecipe(Item ingot)
+	{
+		return activeAutoCraftingRecipe("Block", ingot);
+	}
 
+	public JBlock activeAutoCraftingRecipe(String schemaType, Item ingot)
+	{
+		JFunction.addBasicRecipe(this,ingot, schemaType);
+		return this;
+	}
 }
